@@ -79,6 +79,4 @@ dlldata.c
 *.svclog
 *.scc
 
-doc
-bRenderer.VC.db
 bRenderer.VC.VC.opendb
