@@ -43,6 +43,8 @@ bld/
 [Bb]in/
 [Oo]bj/
 # Visual Studo 2015 cache/options directory
+bRenderer.VC.db
+bRenderer.VC.VC.opendb
 .vs/
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -78,5 +80,3 @@ dlldata.c
 *.pidb
 *.svclog
 *.scc
-
-bRenderer.VC.VC.opendb
