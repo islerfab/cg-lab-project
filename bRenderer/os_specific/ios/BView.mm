@@ -48,16 +48,16 @@
     
     // configure the properties of the canvas
     _eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking,
+                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking,
                                      kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat,
                                      nil];
     
     // create an OpenGL ES 3.0 context
-//    _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
-	// If Es 3.0 is not supported create an OpenGL ES 2.0 context
-//	if (_context == nil) {
-	  _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2]; // freetype-gl doesn't support es3
-//	}
+    //    _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
+    // If Es 3.0 is not supported create an OpenGL ES 2.0 context
+    //	if (_context == nil) {
+    _context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2]; // freetype-gl doesn't support es3
+    //	}
     
     // quit if context creation failed
     if (!_context || ![self setContextCurrent]) {
@@ -81,7 +81,7 @@
     
     // create buffers
     [self createFramebuffer];
-
+    
     return self;
 }
 
@@ -115,7 +115,7 @@
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _width, _height);
     // attach the depth buffer to the framebuffer
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderbuffer);
-
+    
     // check that the configuration of the framebuffer is valid
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         bRenderer::log("Failed to make complete framebuffer object", bRenderer::LM_SYS);
@@ -132,7 +132,7 @@
             glDeleteFramebuffers(1, &_defaultFramebuffer);
             _defaultFramebuffer = 0;
         }
-
+        
         if (_colorRenderbuffer) {
             glDeleteRenderbuffers(1, &_colorRenderbuffer);
             _colorRenderbuffer = 0;
@@ -195,8 +195,8 @@
     _height = self.superview.frame.size.height;
     
     if(_width == 0 || _height == 0){
-            _width = [[UIScreen mainScreen] bounds].size.width;
-            _height = [[UIScreen mainScreen] bounds].size.height;
+        _width = [[UIScreen mainScreen] bounds].size.width;
+        _height = [[UIScreen mainScreen] bounds].size.height;
     }
     
     [self setViewPositionX: 0 setViewPositionY: 0];
@@ -231,7 +231,7 @@
 }
 
 /* As soon as the view is resized or new subviews are added, this method is called,
- * apparently the framebuffers are invalid in this case so they are deleted and recreated 
+ * apparently the framebuffers are invalid in this case so they are deleted and recreated
  * when entering the render loop again */
 - (void)layoutSubviews
 {
@@ -246,7 +246,7 @@
     _doubleTapRecognized = false;
     _singleTapRecognized = false;
     
-//    bRenderer::log("Touch began");
+    //    bRenderer::log("Touch began");
     
     for (UITouch *touch in touches) {
         
@@ -254,14 +254,14 @@
         CGPoint beginTouchPosition = [touch locationInView:self];
         
         // add touch
-        _touches[(int)touch] = {beginTouchPosition.x, beginTouchPosition.y, beginTouchPosition.x, beginTouchPosition.y, beginTouchPosition.x, beginTouchPosition.y};
+        _touches[(int)(size_t)touch] = {static_cast<GLfloat>(beginTouchPosition.x), static_cast<GLfloat>(beginTouchPosition.y), static_cast<GLfloat>(beginTouchPosition.x), static_cast<GLfloat>(beginTouchPosition.y), static_cast<GLfloat>(beginTouchPosition.x), static_cast<GLfloat>(beginTouchPosition.y)};
     }
 }
 /* Receive touch events: Touch moved */
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesMoved:touches withEvent:event];
-//    bRenderer::log("Touch moved");
+    //    bRenderer::log("Touch moved");
     
     for (UITouch *touch in touches) {
         
@@ -269,34 +269,34 @@
         CGPoint currentTouchPosition = [touch locationInView:self];
         
         // update touch
-        _touches[(int)touch].lastPositionX = _touches[(int)touch].currentPositionX;
-        _touches[(int)touch].lastPositionY = _touches[(int)touch].currentPositionY;
-        _touches[(int)touch].currentPositionX = currentTouchPosition.x;
-        _touches[(int)touch].currentPositionY = currentTouchPosition.y;
+        _touches[(int)(size_t)touch].lastPositionX = _touches[(int)(size_t)touch].currentPositionX;
+        _touches[(int)(size_t)touch].lastPositionY = _touches[(int)(size_t)touch].currentPositionY;
+        _touches[(int)(size_t)touch].currentPositionX = currentTouchPosition.x;
+        _touches[(int)(size_t)touch].currentPositionY = currentTouchPosition.y;
     }
 }
 /* Receive touch events: Touch ended */
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesEnded:touches withEvent:event];
-//    bRenderer::log("Touch ended");
+    //    bRenderer::log("Touch ended");
     
     for (UITouch *touch in touches) {
         
         // remove touch
-        _touches.erase((int)touch);
+        _touches.erase((int)(size_t)touch);
         
         if (touch.tapCount >= 2) {
             // double Tap
             _lastDoubleTapLocation = [touch locationInView:self];
             _doubleTapRecognized = true;
-//            bRenderer::log("Double Tap");
+            //            bRenderer::log("Double Tap");
         }
         else {
             // single Tap
             _lastSingleTapLocation = [touch locationInView:self];
             _singleTapRecognized = true;
-//            bRenderer::log("Single Tap");
+            //            bRenderer::log("Single Tap");
         }
     }
 }
@@ -309,7 +309,7 @@
     for (UITouch *touch in touches) {
         
         // remove touch
-        _touches.erase((int)touch);
+        _touches.erase((int)(size_t)touch);
     }
     
 }
@@ -337,12 +337,12 @@
 
 - (Touch)getLastSingleTapLocation
 {
-    return {_lastSingleTapLocation.x, _lastSingleTapLocation.y, _lastSingleTapLocation.x, _lastSingleTapLocation.y, _lastSingleTapLocation.x, _lastSingleTapLocation.y};
+    return {static_cast<GLfloat>((double)_lastSingleTapLocation.x), static_cast<GLfloat>(_lastSingleTapLocation.y), static_cast<GLfloat>(_lastSingleTapLocation.x), static_cast<GLfloat>(_lastSingleTapLocation.y), static_cast<GLfloat>(_lastSingleTapLocation.x), static_cast<GLfloat>(_lastSingleTapLocation.y)};
 }
 
 - (Touch)getLastDoubleTapLocation
 {
-    return {_lastDoubleTapLocation.x, _lastDoubleTapLocation.y, _lastDoubleTapLocation.x, _lastDoubleTapLocation.y, _lastSingleTapLocation.x, _lastSingleTapLocation.y};
+    return {static_cast<GLfloat>(_lastDoubleTapLocation.x), static_cast<GLfloat>(_lastDoubleTapLocation.y), static_cast<GLfloat>(_lastDoubleTapLocation.x), static_cast<GLfloat>(_lastDoubleTapLocation.y), static_cast<GLfloat>(_lastSingleTapLocation.x), static_cast<GLfloat>(_lastSingleTapLocation.y)};
 }
 
 - (void)dealloc
