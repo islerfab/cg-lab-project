@@ -55,7 +55,7 @@ void RenderProject::initFunction()
 	//bRenderer().getObjects()->loadObjModel("crystal.obj", false, true, customShader);									// the custom shader created above is used
 	bRenderer().getObjects()->loadObjModel_o("crystal.obj", customShader, FLIP_Z);									// the custom shader created above is used
 	//bRenderer().getObjects()->loadObjModel("torch.obj", false, true, false, 1, false, true);							// create custom shader with a maximum of 1 light
-	bRenderer().getObjects()->loadObjModel_o("jellyfish.obj", 1, FLIP_Z | AMBIENT_LIGHTING);							// create custom shader with a maximum of 1 light
+	bRenderer().getObjects()->loadObjModel_o("cube.obj", 1, FLIP_Z | AMBIENT_LIGHTING);							// create custom shader with a maximum of 1 light
 
 	// create sprites
 	bRenderer().getObjects()->createSprite_o("flame", flameMaterial, NO_OPTION, flameProperties);				// create a sprite using the material created above, to pass additional properties a Properties object is used
@@ -203,7 +203,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	modelMatrix = vmml::create_translation(vmml::Vector3f(78.0f, -17.0f, 5.5f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
-	bRenderer().getModelRenderer()->queueModelInstance("crystal", "crystal_blue", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }), true, false, true);
+	bRenderer().getModelRenderer()->queueModelInstance("cube", "crystal_blue", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }), true, false, true);
 
 	/*** Crystal (green) ***/
 	// translate and scale 
@@ -225,7 +225,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	modelMatrix = bRenderer().getObjects()->getCamera(camera)->getInverseViewMatrix();		// position and orient to match camera
 	modelMatrix *= vmml::create_translation(vmml::Vector3f(0.75f, -1.1f, 0.8f)) * vmml::create_scaling(vmml::Vector3f(1.2f)) * vmml::create_rotation(1.64f, vmml::Vector3f::UNIT_Y); // now position it relative to the camera
 	// submit to render queue
-	bRenderer().getModelRenderer()->queueModelInstance("jellyfish", "torch_instance", camera, modelMatrix, std::vector<std::string>({ "torchLight" }));
+	bRenderer().getModelRenderer()->queueModelInstance("cube", "torch_instance", camera, modelMatrix, std::vector<std::string>({ "torchLight" }));
 
 	/*** Flame ***/
 	// pass additional properties to the shader
