@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		072E7CDB1EC0ABBD00186F27 /* jellyfish.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 072E7CD91EC0ABBD00186F27 /* jellyfish.mtl */; };
+		072E7CDC1EC0ABBD00186F27 /* jellyfish.obj in Resources */ = {isa = PBXBuildFile; fileRef = 072E7CDA1EC0ABBD00186F27 /* jellyfish.obj */; };
 		B44186971BA331E300604D7F /* RenderProject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B44186961BA331E300604D7F /* RenderProject.cpp */; };
 		B47949A21BA6742B00B5E9DC /* arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B47949851BA6742B00B5E9DC /* arial.ttf */; };
 		B47949A31BA6742B00B5E9DC /* basicTitle_light.png in Resources */ = {isa = PBXBuildFile; fileRef = B47949861BA6742B00B5E9DC /* basicTitle_light.png */; };
@@ -135,6 +137,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		072E7CD91EC0ABBD00186F27 /* jellyfish.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = jellyfish.mtl; sourceTree = "<group>"; };
+		072E7CDA1EC0ABBD00186F27 /* jellyfish.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = jellyfish.obj; sourceTree = "<group>"; };
 		B44186941BA331E300604D7F /* RenderProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderProject.h; sourceTree = "<group>"; };
 		B44186961BA331E300604D7F /* RenderProject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderProject.cpp; sourceTree = "<group>"; };
 		B47949851BA6742B00B5E9DC /* arial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = arial.ttf; sourceTree = "<group>"; };
@@ -379,6 +383,8 @@
 		B47949841BA6742B00B5E9DC /* data */ = {
 			isa = PBXGroup;
 			children = (
+				072E7CD91EC0ABBD00186F27 /* jellyfish.mtl */,
+				072E7CDA1EC0ABBD00186F27 /* jellyfish.obj */,
 				B47949851BA6742B00B5E9DC /* arial.ttf */,
 				B47949861BA6742B00B5E9DC /* basicTitle_light.png */,
 				B47949871BA6742B00B5E9DC /* blurShader.frag */,
@@ -741,6 +747,7 @@
 				B47949B41BA6742B00B5E9DC /* crystal_s.png in Resources */,
 				B47949B71BA6742B00B5E9DC /* flame.obj in Resources */,
 				B4794A2A1BA6743D00B5E9DC /* LICENSE.txt in Resources */,
+				072E7CDC1EC0ABBD00186F27 /* jellyfish.obj in Resources */,
 				B47949A51BA6742B00B5E9DC /* blurShader.vert in Resources */,
 				B47949AA1BA6742B00B5E9DC /* cave_stream.frag in Resources */,
 				B47949AD1BA6742B00B5E9DC /* cave_stream.vert in Resources */,
@@ -749,6 +756,7 @@
 				B47949A71BA6742B00B5E9DC /* cave.obj in Resources */,
 				B47949B81BA6742B00B5E9DC /* flame.png in Resources */,
 				B47949BE1BA6742B00B5E9DC /* torchSurface_Color.png in Resources */,
+				072E7CDB1EC0ABBD00186F27 /* jellyfish.mtl in Resources */,
 				B47949B91BA6742B00B5E9DC /* flame.vert in Resources */,
 				B47949A31BA6742B00B5E9DC /* basicTitle_light.png in Resources */,
 				B47949BC1BA6742B00B5E9DC /* torch.mtl in Resources */,
