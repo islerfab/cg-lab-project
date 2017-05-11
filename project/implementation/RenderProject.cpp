@@ -54,6 +54,7 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("cave_stream.obj", 4, FLIP_T | FLIP_Z | SHADER_FROM_FILE, streamProperties);		// automatically loads shader files according to the name of the material
 	//bRenderer().getObjects()->loadObjModel("crystal.obj", false, true, customShader);									// the custom shader created above is used
 	bRenderer().getObjects()->loadObjModel_o("crystal.obj", customShader, FLIP_Z);									// the custom shader created above is used
+	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);									// the custom shader created above is used
 	//bRenderer().getObjects()->loadObjModel("torch.obj", false, true, false, 1, false, true);							// create custom shader with a maximum of 1 light
 	bRenderer().getObjects()->loadObjModel_o("torch.obj", 1, FLIP_Z | AMBIENT_LIGHTING);							// create custom shader with a maximum of 1 light
 
@@ -200,24 +201,24 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 
 	/*** Crystal (blue) ***/
 	// translate and scale
-	modelMatrix = vmml::create_translation(vmml::Vector3f(78.0f, -17.0f, 5.5f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(78.0f, -24.0f, 5.5f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
-	bRenderer().getModelRenderer()->queueModelInstance("crystal", "crystal_blue", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }), true, false, true);
+	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_blue", camera, modelMatrix, std::vector<std::string>({ "torchLight", "firstLight" }), true, false, true);
 
 	/*** Crystal (green) ***/
 	// translate and scale 
-	modelMatrix = vmml::create_translation(vmml::Vector3f(148.0f, -17.0f, 15.0f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(148.0f, -24.0f, 15.0f)) * vmml::create_scaling(vmml::Vector3f(25.0f));
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.7f, 0.2f));
-	bRenderer().getModelRenderer()->queueModelInstance("crystal", "crystal_green", camera, modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }), true, false, true);
+	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_green", camera, modelMatrix, std::vector<std::string>({ "torchLight", "secondLight" }), true, false, true);
 
 	/*** Crystal (red) ***/
 	// translate and scale 
-	modelMatrix = vmml::create_translation(vmml::Vector3f(218.0f, -17.0f, 4.0f)) * vmml::create_scaling(vmml::Vector3f(0.1f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(218.0f, -24.0f, 4.0f)) * vmml::create_scaling(vmml::Vector3f(40.0f));
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.8f, 0.2f, 0.2f));
-	bRenderer().getModelRenderer()->queueModelInstance("crystal", "crystal_red", camera, modelMatrix, std::vector<std::string>({ "torchLight", "thirdLight" }), true, false, true);
+	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_red", camera, modelMatrix, std::vector<std::string>({ "torchLight", "thirdLight" }), true, false, true);
 	bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
 	///*** Torch ***/
