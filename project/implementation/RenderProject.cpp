@@ -47,6 +47,7 @@ void RenderProject::initFunction()
 	// load models
 	//bRenderer().getObjects()->loadObjModel("cave.obj", true, true, false, 4, true, false);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
 	bRenderer().getObjects()->loadObjModel_o("cave.obj", 5, FLIP_T | FLIP_Z | VARIABLE_NUMBER_OF_LIGHTS);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().getObjects()->loadObjModel_o("floor.obj", 5, VARIABLE_NUMBER_OF_LIGHTS);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
 	//bRenderer().getObjects()->loadObjModel("cave_stream.obj", true, true, true, 4, false, false, streamProperties);		// automatically loads shader files according to the name of the material
     
     
@@ -69,11 +70,11 @@ void RenderProject::initFunction()
 		bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
 
 	// create camera
-	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(-33.0, 0.f, -13.0), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
+	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
 
 	// create lights
-	bRenderer().getObjects()->createLight("dayLight", vmml::Vector3f(0.0f, 500.0f, 0.0f), vmml::Vector3f(1.0f, 0.85f, 0.7f), 500.0f, 0.0f, 1000.0);
-	bRenderer().getObjects()->createLight("headLamp", -bRenderer().getObjects()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 1.0f, 1.0f), 2500.0f, 0.8f, 45.0f);
+	bRenderer().getObjects()->createLight("dayLight", vmml::Vector3f(0.0f, 5000.0f, 0.0f), vmml::Vector3f(1.0f, 0.85f, 0.7f), 5000.0f, 0.001f, 10000.0);
+	bRenderer().getObjects()->createLight("headLamp", -bRenderer().getObjects()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 1.0f, 1.0f), 2500.0f, 0.8f, 100.0f);
 
 	// postprocessing
 	bRenderer().getObjects()->createFramebuffer("fbo");					// create framebuffer object
@@ -158,7 +159,7 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
 
 	//// Head Lamp ////
 	// set the light to be at the camera position
-	bRenderer().getObjects()->getLight("headLamp")->setPosition(-bRenderer().getObjects()->getCamera("camera")->getPosition() - bRenderer().getObjects()->getCamera("camera")->getForward()*10.0f);
+	bRenderer().getObjects()->getLight("headLamp")->setPosition(-bRenderer().getObjects()->getCamera("camera")->getPosition());
 
 	/// Update render queue ///
 	updateRenderQueue("camera", deltaTime);
@@ -182,29 +183,36 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(30.f, -24.0, 0.0)) * vmml::create_scaling(vmml::Vector3f(0.3f));
 	// submit to render queue
 	// bRenderer().getModelRenderer()->queueModelInstance("cave", "cave_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, true);
-	
+
 	/*** Cave stream ***/
 	bRenderer().getObjects()->getProperties("streamProperties")->setScalar("offset", _offset);		// pass offset for wave effect
+																									// submit to render queue
+	//bRenderer().getModelRenderer()->queueModelInstance("cave_stream", "cave_stream_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1.0f);
+
+	// Floor
+	vmml::Matrix4f rota = vmml::Matrix4f::IDENTITY;
+	rota.rotate_x(-M_PI_2_F); rota.rotate_z(-M_PI_2_F);
+	modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, -26.0f, 0.0f)) * vmml::create_scaling(vmml::Vector3f(20.0f, 1.0f, 20.0f)) * rota;
 	// submit to render queue
-	bRenderer().getModelRenderer()->queueModelInstance("cave_stream", "cave_stream_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1.0f);
+	bRenderer().getModelRenderer()->queueModelInstance("floor", "floor_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }));
 
 	/*** Crystal (blue) ***/
 	// translate and scale
-	modelMatrix = vmml::create_translation(vmml::Vector3f(78.0f, -24.0f, 5.5f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(50.0f, -24.0f, 24.5f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
 	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_blue", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true);
 
 	/*** Crystal (green) ***/
 	// translate and scale 
-	modelMatrix = vmml::create_translation(vmml::Vector3f(148.0f, -24.0f, 15.0f)) * vmml::create_scaling(vmml::Vector3f(25.0f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(-25.0f, -24.0f, -5.0f)) * vmml::create_scaling(vmml::Vector3f(25.0f));
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.7f, 0.2f));
 	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_green", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true);
 
 	/*** Crystal (red) ***/
 	// translate and scale 
-	modelMatrix = vmml::create_translation(vmml::Vector3f(218.0f, -24.0f, 4.0f)) * vmml::create_scaling(vmml::Vector3f(40.0f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, -24.0f, 60.0f)) * vmml::create_scaling(vmml::Vector3f(40.0f));
 	// submit to render queue
 	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.8f, 0.2f, 0.2f));
 	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_red", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true);
