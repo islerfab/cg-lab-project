@@ -2,4 +2,6 @@
 
 newmtl White
 Kd 1.000000 1.000000 1.000000
-map_Kd sttionry.jpg
+
+newmtl Green
+Kd 0.129412 0.733333 0.298039
