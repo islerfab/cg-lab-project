@@ -56,6 +56,8 @@ void RenderProject::initFunction()
 	//bRenderer().getObjects()->loadObjModel("crystal.obj", false, true, customShader);									// the custom shader created above is used
 	bRenderer().getObjects()->loadObjModel_o("crystal.obj", customShader, FLIP_Z);									// the custom shader created above is used
 	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);									// the custom shader created above is used
+	bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);									// the custom shader created above is used
+
 
 	// create sprites
 	bRenderer().getObjects()->createSprite_o("flame", flameMaterial, NO_OPTION, flameProperties);				// create a sprite using the material created above, to pass additional properties a Properties object is used
@@ -73,7 +75,7 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
 
 	// create lights
-	bRenderer().getObjects()->createLight("dayLight", vmml::Vector3f(0.0f, 5000.0f, 0.0f), vmml::Vector3f(1.0f, 0.85f, 0.7f), 5000.0f, 0.001f, 10000.0);
+	bRenderer().getObjects()->createLight("dayLight", vmml::Vector3f(0.0f, 500.0f, 0.0f), vmml::Vector3f(1.0f, 0.85f, 0.7f), 10.0f, 0.0f, 10000.0);
 	bRenderer().getObjects()->createLight("headLamp", -bRenderer().getObjects()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 1.0f, 1.0f), 2500.0f, 0.8f, 100.0f);
 
 	// postprocessing
@@ -196,26 +198,30 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	// submit to render queue
 	bRenderer().getModelRenderer()->queueModelInstance("floor", "floor_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }));
 
-	/*** Crystal (blue) ***/
-	// translate and scale
-	modelMatrix = vmml::create_translation(vmml::Vector3f(50.0f, -24.0f, 24.5f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
-	// submit to render queue
-	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
-	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_blue", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true);
+	/*** Plants ***/
+	int count = 0;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			// translate and scale
+			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f, -24.0f, j*5.0f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
+			// submit to render queue
+			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
+			bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "plant_" + count++, camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }));
+		}
+	}
 
-	/*** Crystal (green) ***/
-	// translate and scale 
-	modelMatrix = vmml::create_translation(vmml::Vector3f(-25.0f, -24.0f, -5.0f)) * vmml::create_scaling(vmml::Vector3f(25.0f));
-	// submit to render queue
-	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.7f, 0.2f));
-	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_green", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true);
 
-	/*** Crystal (red) ***/
-	// translate and scale 
-	modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, -24.0f, 60.0f)) * vmml::create_scaling(vmml::Vector3f(40.0f));
-	// submit to render queue
-	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.8f, 0.2f, 0.2f));
-	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_red", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true);
+	/*** Shells ***/
+	count = 0;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			// translate and scale
+			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f-1.0, -24.0f, j*5.0-1.0f)) * vmml::create_scaling(vmml::Vector3f(10.0f));
+			// submit to render queue
+			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
+			bRenderer().getModelRenderer()->queueModelInstance("lambis_truncata_shell", "shell_instance_" + count++, camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }));
+		}
+	}
 	
 	// reset ambient color
 	bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
