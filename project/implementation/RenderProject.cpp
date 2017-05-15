@@ -58,7 +58,6 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);									// the custom shader created above is used
 	bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);									// the custom shader created above is used
 
-
 	// create sprites
 	bRenderer().getObjects()->createSprite_o("flame", flameMaterial, NO_OPTION, flameProperties);				// create a sprite using the material created above, to pass additional properties a Properties object is used
 	bRenderer().getObjects()->createSprite("sparks", "sparks.png");										// create a sprite displaying sparks as a texture
@@ -239,6 +238,9 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
 	double cameraForward = 0.0;
 	double cameraSideward = 0.0;
 
+	vmml::Vector3f oldcampos = bRenderer().getObjects()->getCamera(camera)->getPosition();
+	//std::cout << oldcampos << std::endl;
+
 	/* iOS: control movement using touch screen */
 	if (Input::isTouchDevice()){
 
@@ -325,6 +327,10 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
 		bRenderer().getObjects()->getCamera(camera)->moveCameraForward(cameraForward*_cameraSpeed*deltaTime);
 		bRenderer().getObjects()->getCamera(camera)->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
 		bRenderer().getObjects()->getCamera(camera)->moveCameraSideward(cameraSideward*_cameraSpeed*deltaTime);
+		vmml::Vector3f newcampos = bRenderer().getObjects()->getCamera(camera)->getPosition();
+		if ((newcampos.y() < -30.0f) || (newcampos.y() > 23.0f)){
+			bRenderer().getObjects()->getCamera(camera)->setPosition(oldcampos);
+		}
 	}	
 }
 
