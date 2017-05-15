@@ -9,7 +9,7 @@ void RenderProject::init()
 	if(Input::isTouchDevice())
 		bRenderer().initRenderer(true);										// full screen on iOS
 	else
-		bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
+		bRenderer().initRenderer(1920, 1080, false, "The Dive - Demo");		// windowed mode on desktop
 		//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// full screen using full width and height of the screen
 
 	// start main loop 
