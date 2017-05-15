@@ -57,29 +57,38 @@ void main() {
 	vec3 thirdRow = vec3(vertexTangent_ViewSpace.z, vertexBitangent_ViewSpace.z, vertexNormal_ViewSpace.z);
 	mat3 TBN = mat3(firstRow, secondRow, thirdRow);
 	surfaceToCameraTangentSpace = TBN*( - posViewSpace.xyz );
+
+	// First light
 	lightVectorTangentSpace_0 = TBN*(lightPositionViewSpace_0.xyz - posViewSpace.xyz);
 	lightDistance = distance(posViewSpace, lightPositionViewSpace_0);
 	intensityBasedOnDist_0 = 0.0;
 	if (lightDistance <= lightRadius_0) {
-	intensityBasedOnDist_0 = clamp(lightIntensity_0 / (lightAttenuation_0*lightDistance*lightDistance), 0.0, 1.0);
+		intensityBasedOnDist_0 = clamp(lightIntensity_0 / (lightAttenuation_0*lightDistance*lightDistance), 0.0, 1.0);
 	};
+
+	// Second Light
 	lightVectorTangentSpace_1 = TBN*(lightPositionViewSpace_1.xyz - posViewSpace.xyz);
 	lightDistance = distance(posViewSpace, lightPositionViewSpace_1);
 	intensityBasedOnDist_1 = 0.0;
 	if (lightDistance <= lightRadius_1) {
-	intensityBasedOnDist_1 = clamp(lightIntensity_1 / (lightAttenuation_1*lightDistance*lightDistance), 0.0, 1.0);
+		intensityBasedOnDist_1 = clamp(lightIntensity_1 / (lightAttenuation_1*lightDistance*lightDistance), 0.0, 1.0);
 	};
+
+	// Third Light
 	lightVectorTangentSpace_2 = TBN*(lightPositionViewSpace_2.xyz - posViewSpace.xyz);
 	lightDistance = distance(posViewSpace, lightPositionViewSpace_2);
 	intensityBasedOnDist_2 = 0.0;
 	if (lightDistance <= lightRadius_2) {
-	intensityBasedOnDist_2 = clamp(lightIntensity_2 / (lightAttenuation_2*lightDistance*lightDistance), 0.0, 1.0);
+		intensityBasedOnDist_2 = clamp(lightIntensity_2 / (lightAttenuation_2*lightDistance*lightDistance), 0.0, 1.0);
 	};
+
+	// Fourth Light
 	lightVectorTangentSpace_3 = TBN*(lightPositionViewSpace_3.xyz - posViewSpace.xyz);
 	lightDistance = distance(posViewSpace, lightPositionViewSpace_3);
 	intensityBasedOnDist_3 = 0.0;
 	if (lightDistance <= lightRadius_3) {
-	intensityBasedOnDist_3 = clamp(lightIntensity_3 / (lightAttenuation_3*lightDistance*lightDistance), 0.0, 1.0);
+		intensityBasedOnDist_3 = clamp(lightIntensity_3 / (lightAttenuation_3*lightDistance*lightDistance), 0.0, 1.0);
 	};
+
 	gl_Position = ProjectionMatrix*posViewSpace;
 }
