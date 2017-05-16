@@ -9,8 +9,6 @@
 *.slo
 *.lo
 *.o
-*.obj
-!project/data/**/*.obj
 
 # Precompiled Headers
 *.gch
