@@ -9,7 +9,7 @@ void RenderProject::init()
 	if(Input::isTouchDevice())
 		bRenderer().initRenderer(true);										// full screen on iOS
 	else
-		bRenderer().initRenderer(1920, 1080, false, "The Dive - Demo");		// windowed mode on desktop
+		bRenderer().initRenderer(1920, 1080, false, "The Cave - Demo");		// windowed mode on desktop
 		//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// full screen using full width and height of the screen
 
 	// start main loop 
@@ -36,19 +36,30 @@ void RenderProject::initFunction()
 
 	// load materials and shaders before loading the model
 	ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", { 2, true, true, true, true, true, true, true, true, true, false, false, false });	// automatically generates a shader with a maximum of 2 lights
-		// ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile_o("flame", 0, AMBIENT_LIGHTING);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
-		// MaterialPtr flameMaterial = bRenderer().getObjects()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
+	//ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile("flame", 0, false, true, true, false, false);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
+	ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile_o("flame", 0, AMBIENT_LIGHTING);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
+	MaterialPtr flameMaterial = bRenderer().getObjects()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
 
 	// create additional properties for a model
-		// PropertiesPtr flameProperties = bRenderer().getObjects()->createProperties("flameProperties");
+	PropertiesPtr flameProperties = bRenderer().getObjects()->createProperties("flameProperties");
+	PropertiesPtr streamProperties = bRenderer().getObjects()->createProperties("streamProperties");
 
 	// load models
-	bRenderer().getObjects()->loadObjModel_o("floor.obj", 4, FLIP_Z | SHADER_FROM_FILE);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
-	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE);				
-	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
-	bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
+	//bRenderer().getObjects()->loadObjModel("cave.obj", true, true, false, 4, true, false);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().getObjects()->loadObjModel_o("cave.obj", 5, FLIP_T | FLIP_Z | VARIABLE_NUMBER_OF_LIGHTS);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().getObjects()->loadObjModel_o("floor.obj", 5, VARIABLE_NUMBER_OF_LIGHTS);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
+	//bRenderer().getObjects()->loadObjModel("cave_stream.obj", true, true, true, 4, false, false, streamProperties);		// automatically loads shader files according to the name of the material
+    
+    
+    
+	bRenderer().getObjects()->loadObjModel_o("cave_stream.obj", 4, FLIP_T | FLIP_Z | SHADER_FROM_FILE, streamProperties);		// automatically loads shader files according to the name of the material
+	//bRenderer().getObjects()->loadObjModel("crystal.obj", false, true, customShader);									// the custom shader created above is used
+	bRenderer().getObjects()->loadObjModel_o("crystal.obj", customShader, FLIP_Z);									// the custom shader created above is used
+	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);									// the custom shader created above is used
 
 	// create sprites
+	bRenderer().getObjects()->createSprite_o("flame", flameMaterial, NO_OPTION, flameProperties);				// create a sprite using the material created above, to pass additional properties a Properties object is used
+	bRenderer().getObjects()->createSprite("sparks", "sparks.png");										// create a sprite displaying sparks as a texture
 	bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");							// create a sprite displaying the title as a texture
 
 	// create text sprites
@@ -62,16 +73,17 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
 
 	// create lights
-	// bRenderer().getObjects()->createLight("dayLight", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(1.0f, 0.85f, 0.7f), 10.0f, 0.01f, 300.0);
-	bRenderer().getObjects()->createLight("headLamp", -bRenderer().getObjects()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 1.0f, 1.0f), 1000.0f, 0.5f, 1000.0f);
+	bRenderer().getObjects()->createLight("dayLight", vmml::Vector3f(0.0f, 5000.0f, 0.0f), vmml::Vector3f(1.0f, 0.85f, 0.7f), 5000.0f, 0.001f, 10000.0);
+	bRenderer().getObjects()->createLight("headLamp", -bRenderer().getObjects()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 1.0f, 1.0f), 2500.0f, 0.8f, 100.0f);
 
 	// postprocessing
 	bRenderer().getObjects()->createFramebuffer("fbo");					// create framebuffer object
 	bRenderer().getObjects()->createTexture("fbo_texture1", 0.f, 0.f);	// create texture to bind to the fbo
 	bRenderer().getObjects()->createTexture("fbo_texture2", 0.f, 0.f);	// create texture to bind to the fbo
+	//ShaderPtr blurShader = bRenderer().getObjects()->loadShaderFile("blurShader", 0, false, false, false, false, false);			// load shader that blurs the texture
 	ShaderPtr blurShader = bRenderer().getObjects()->loadShaderFile_o("blurShader", 0);			// load shader that blurs the texture
 	MaterialPtr blurMaterial = bRenderer().getObjects()->createMaterial("blurMaterial", blurShader);								// create an empty material to assign either texture1 or texture2 to
-	bRenderer().getObjects()->createSprite("blurSprite", blurMaterial);		// create a sprite using the material created above
+	bRenderer().getObjects()->createSprite("blurSprite", blurMaterial);																// create a sprite using the material created above
 
 	// Update render queue
 	updateRenderQueue("camera", 0.0f);
@@ -166,41 +178,44 @@ void RenderProject::terminateFunction()
 /* Update render queue */
 void RenderProject::updateRenderQueue(const std::string &camera, const double &deltaTime)
 {
-	// Cube
-	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 0.0f));
+	/*** Cave ***/
+	// translate and scale 
+	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(30.f, -24.0, 0.0)) * vmml::create_scaling(vmml::Vector3f(0.3f));
 	// submit to render queue
-	bRenderer().getModelRenderer()->queueModelInstance("cube", "cube_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
+	// bRenderer().getModelRenderer()->queueModelInstance("cave", "cave_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, true);
+
+	/*** Cave stream ***/
+	bRenderer().getObjects()->getProperties("streamProperties")->setScalar("offset", _offset);		// pass offset for wave effect
+																									// submit to render queue
+	//bRenderer().getModelRenderer()->queueModelInstance("cave_stream", "cave_stream_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1.0f);
 
 	// Floor
-	modelMatrix = vmml::Matrix4f::IDENTITY;
-	modelMatrix.rotate_x(M_PI_2_F);
-	modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, -99.5f, 0.0f)) * modelMatrix;
+	vmml::Matrix4f rota = vmml::Matrix4f::IDENTITY;
+	rota.rotate_x(-M_PI_2_F); rota.rotate_z(-M_PI_2_F);
+	modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, -26.0f, 0.0f)) * vmml::create_scaling(vmml::Vector3f(20.0f, 1.0f, 20.0f)) * rota;
 	// submit to render queue
-	bRenderer().getModelRenderer()->queueModelInstance("floor", "floor_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
+	bRenderer().getModelRenderer()->queueModelInstance("floor", "floor_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }));
 
-	/*** Plants ***/
-	int count = 0;
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			// translate and scale
-			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f, -99.0f, j*5.0f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
-			// submit to render queue
-			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
-			bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "plant_" + count++, camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
-		}
-	}
+	/*** Crystal (blue) ***/
+	// translate and scale
+	modelMatrix = vmml::create_translation(vmml::Vector3f(50.0f, -24.0f, 24.5f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
+	// submit to render queue
+	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
+	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_blue", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true);
 
-	/*** Shells ***/
-	count = 0;
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			// translate and scale
-			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f-1.0, -99.0f, j*5.0-1.0f)) * vmml::create_scaling(vmml::Vector3f(10.0f));
-			// submit to render queue
-			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
-			bRenderer().getModelRenderer()->queueModelInstance("lambis_truncata_shell", "shell_instance_" + count++, camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
-		}
-	}
+	/*** Crystal (green) ***/
+	// translate and scale 
+	modelMatrix = vmml::create_translation(vmml::Vector3f(-25.0f, -24.0f, -5.0f)) * vmml::create_scaling(vmml::Vector3f(25.0f));
+	// submit to render queue
+	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.7f, 0.2f));
+	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_green", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true);
+
+	/*** Crystal (red) ***/
+	// translate and scale 
+	modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, -24.0f, 60.0f)) * vmml::create_scaling(vmml::Vector3f(40.0f));
+	// submit to render queue
+	bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.8f, 0.2f, 0.2f));
+	bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "crystal_red", camera, modelMatrix, std::vector<std::string>({ "headLamp", "dayLight" }), true, false, true);
 	
 	// reset ambient color
 	bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
@@ -217,9 +232,6 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
 	double deltaCameraX = 0.0;
 	double cameraForward = 0.0;
 	double cameraSideward = 0.0;
-
-	//vmml::Vector3f oldcampos = bRenderer().getObjects()->getCamera(camera)->getPosition();
-	//std::cout << oldcampos << std::endl;
 
 	/* iOS: control movement using touch screen */
 	if (Input::isTouchDevice()){
@@ -307,10 +319,6 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
 		bRenderer().getObjects()->getCamera(camera)->moveCameraForward(cameraForward*_cameraSpeed*deltaTime);
 		bRenderer().getObjects()->getCamera(camera)->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
 		bRenderer().getObjects()->getCamera(camera)->moveCameraSideward(cameraSideward*_cameraSpeed*deltaTime);
-		vmml::Vector3f newcampos = bRenderer().getObjects()->getCamera(camera)->getPosition();
-		if ((newcampos.y() < -30.0f) || (newcampos.y() > 23.0f)){
-			// bRenderer().getObjects()->getCamera(camera)->setPosition(oldcampos);
-		}
 	}	
 }
 

@@ -1,4 +1,5 @@
 # Exported from 3D Builder
 
-newmtl sandfloor
-Kd 0.666667 0.643137 0.400000
+newmtl White
+Kd 1.000000 1.000000 1.000000
+map_Kd sttionry.jpg
