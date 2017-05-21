@@ -38,16 +38,19 @@ varying float intensityBasedOnDist_3;
 varying vec3 surfaceToCameraTangentSpace;
 varying vec3 n;
 varying vec3 surfaceToCamera;
+varying vec4 texCoordVarying;
 uniform mat4 ModelViewMatrix;
 uniform mat4 ProjectionMatrix;
 attribute vec4 Position;
 attribute vec3 Normal;
 attribute vec3 Tangent;
 attribute vec3 Bitangent;
+attribute vec4 TexCoord;
 
 void main() {
 	vec4 posViewSpace = ModelViewMatrix*Position;
 	surfaceToCamera = - posViewSpace.xyz;
+	texCoordVarying = TexCoord;
 	float lightDistance = 0.0;
 	vec3 vertexNormal_ViewSpace = mat3(ModelViewMatrix) * Normal;
 	n = vertexNormal_ViewSpace;
