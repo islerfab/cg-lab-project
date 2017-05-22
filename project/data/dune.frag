@@ -42,6 +42,7 @@ varying vec3 surfaceToCamera;
 varying vec4 texCoordVarying;
 uniform vec3 ambientColor;
 uniform vec3 Kd;
+uniform float offset;
 
 void main() {
 	vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
@@ -86,7 +87,7 @@ void main() {
 	vec2 dt;
 	dt.x = 0.03*offset + sin(uv.y * 50.0 + offset) / 250.0;
 	dt.y = sin(uv.x * 10.0 + offset) / 100.0;
-	vec3 causticColor = texture2D(causticsMap, uv + dt);
+	vec4 causticColor = texture2D(causticsMap, uv + dt);
 
 	diffuse = diffuse * vec4(Kd,1.0);
 
