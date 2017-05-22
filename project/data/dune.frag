@@ -44,11 +44,11 @@ uniform vec3 ambientColor;
 uniform vec3 Kd;
 
 void main() {
-	vec4 diffuse = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
 	vec3 surfaceNormal = normalize(n);
 
 	// The camera in view space goes towards the z-axis
-	vec3 cameraDirection = normalize(vec3(0.0f, 0.0f, 1.0f));
+	vec3 cameraDirection = normalize(vec3(0.0, 0.0, 1.0));
 
 	float intensity = 0.0;
 

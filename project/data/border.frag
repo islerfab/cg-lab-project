@@ -40,7 +40,7 @@ uniform vec3 ambientColor;
 uniform vec3 Kd;
 
 void main() {
-	vec4 diffuse = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
 	vec3 surfaceToCamera = normalize(surfaceToCameraTangentSpace);
 
 	vec3 surfaceNormal = surfaceToCamera;
