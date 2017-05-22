@@ -43,11 +43,11 @@ void RenderProject::initFunction()
 		// PropertiesPtr flameProperties = bRenderer().getObjects()->createProperties("flameProperties");
 
 	// TODO: How to add image to texture
-	bRenderer().getObjects()->createTexture("caustics", 475.0f, 474.0f, GL_RGBA, ImageDataPtr("caustic_specular_map.png"));
+    bRenderer().getObjects()->loadTexture("caustic_specular_map.png");
 
 	// load models
 	bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
-	bRenderer().getObjects()->getShader("dune.frag")->setUniform("causticTexture", bRenderer().getObjects()->getTexture("caustics"));
+	bRenderer().getObjects()->getShader("dune.frag")->setUniform("causticTexture", bRenderer().getObjects()->getTexture("caustic_specular_map.png"));
 	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE);				
 	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
 	bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
