@@ -47,6 +47,9 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE);				
 	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
 	bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
+    
+    bRenderer().getObjects()->loadObjModel_o("Chest.obj", customShader, FLIP_Z);									// the custom shader created above is used
+
 
 	// create sprites
 	bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");							// create a sprite displaying the title as a texture
@@ -54,7 +57,7 @@ void RenderProject::initFunction()
 	// create text sprites
 	FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
 	if (Input::isTouchDevice())
-		bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Double tap to start", font);
+    bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(0,0,255), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);
 	else
 		bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
 
@@ -127,11 +130,12 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
 		bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("bTitle"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false);
 
 		/*** Instructions ***/
-		titleScale = 0.1f;
-		scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
-		modelMatrix = vmml::create_translation(vmml::Vector3f(-0.45f / bRenderer().getView()->getAspectRatio(), -0.6f, -0.65f)) * scaling;
-		// draw
-		bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+        titleScale = 0.08f;
+        scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), -0.6f, -0.65f)) * scaling;
+        // draw
+        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+
     }
 
 	//// Camera Movement ////
@@ -185,6 +189,11 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	modelMatrix = vmml::create_translation(vmml::Vector3f(-5.0f, -199.0f, -5.0f)) * vmml::create_scaling(vmml::Vector3f(0.22f)) * vmml::create_translation(vmml::Vector3f(500.0f, 0.0f, 1000.0f));
 	bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance4", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 
+    
+    
+    
+    
+    
 	/*** Plants ***/
 	int count = 0;
 	for (int i = 0; i < 3; i++) {
@@ -193,10 +202,20 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f, -198.0f, j*5.0f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
 			// submit to render queue
 			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
-			bRenderer().getModelRenderer()->queueModelInstance("AG01_1", "plant_" + count++, camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
+			bRenderer().getModelRenderer()->queueModelInstance("AG01_1", &"plant_" [ count++], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
 		}
 	}
-
+    
+    
+    
+    /*** Treasure ***/
+    
+    // translate and scale
+    modelMatrix = vmml::create_translation(vmml::Vector3f(10*5.0f, -198.0f, 10*5.0f)) * vmml::create_scaling(vmml::Vector3f(0.24f));
+    // submit to render queue
+    // bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
+    bRenderer().getModelRenderer()->queueModelInstance("Chest", "treasure", camera, modelMatrix, std::vector<std::string>({ "headLamp" }));    
+    
 	/*** Shells ***/
 	count = 0;
 	for (int i = 0; i < 3; i++) {
@@ -205,7 +224,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f-1.0, -198.0f, j*5.0-1.0f)) * vmml::create_scaling(vmml::Vector3f(10.0f));
 			// submit to render queue
 			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
-			bRenderer().getModelRenderer()->queueModelInstance("lambis_truncata_shell", "shell_instance_" + count++, camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
+			bRenderer().getModelRenderer()->queueModelInstance("lambis_truncata_shell", &"shell_instance_" [ count++], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
 		}
 	}
 	

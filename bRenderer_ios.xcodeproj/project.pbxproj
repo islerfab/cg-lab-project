@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0788F4761ED32A7200EAA604 /* Chest_ao.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0788F4711ED32A7200EAA604 /* Chest_ao.jpg */; };
+		0788F4771ED32A7200EAA604 /* Chest_diffuse.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0788F4721ED32A7200EAA604 /* Chest_diffuse.jpg */; };
+		0788F4781ED32A7200EAA604 /* Chest.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 0788F4731ED32A7200EAA604 /* Chest.mtl */; };
+		0788F4791ED32A7200EAA604 /* Chest.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0788F4741ED32A7200EAA604 /* Chest.obj */; };
+		0788F47A1ED32A7200EAA604 /* under water models in Resources */ = {isa = PBXBuildFile; fileRef = 0788F4751ED32A7200EAA604 /* under water models */; };
 		07FC000A1ED04D590031E8DE /* AG01_1_old.obj in Resources */ = {isa = PBXBuildFile; fileRef = 07FCFFC41ED04D590031E8DE /* AG01_1_old.obj */; };
 		07FC000B1ED04D590031E8DE /* AG01_1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 07FCFFC51ED04D590031E8DE /* AG01_1.mtl */; };
 		07FC000C1ED04D590031E8DE /* AG01_1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 07FCFFC61ED04D590031E8DE /* AG01_1.obj */; };
@@ -190,6 +195,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0788F4711ED32A7200EAA604 /* Chest_ao.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Chest_ao.jpg; sourceTree = "<group>"; };
+		0788F4721ED32A7200EAA604 /* Chest_diffuse.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Chest_diffuse.jpg; sourceTree = "<group>"; };
+		0788F4731ED32A7200EAA604 /* Chest.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chest.mtl; sourceTree = "<group>"; };
+		0788F4741ED32A7200EAA604 /* Chest.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chest.obj; sourceTree = "<group>"; };
+		0788F4751ED32A7200EAA604 /* under water models */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "under water models"; sourceTree = "<group>"; };
 		07FC00001ED04D590031E8DE /* sandfloor.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = sandfloor.vert; sourceTree = "<group>"; };
 		07FC00011ED04D590031E8DE /* skybox.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = skybox.obj; sourceTree = "<group>"; };
 		07FC00021ED04D590031E8DE /* sparks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sparks.png; sourceTree = "<group>"; };
@@ -489,6 +499,11 @@
 		B47949841BA6742B00B5E9DC /* data */ = {
 			isa = PBXGroup;
 			children = (
+				0788F4711ED32A7200EAA604 /* Chest_ao.jpg */,
+				0788F4721ED32A7200EAA604 /* Chest_diffuse.jpg */,
+				0788F4731ED32A7200EAA604 /* Chest.mtl */,
+				0788F4741ED32A7200EAA604 /* Chest.obj */,
+				0788F4751ED32A7200EAA604 /* under water models */,
 				07FF58551ED3165A00FB6AB0 /* bubinga_gemasert_color.jpg */,
 				07FF58561ED3165A00FB6AB0 /* crab.jpg */,
 				07FF58571ED3165A00FB6AB0 /* dune.frag */,
@@ -900,6 +915,7 @@
 				07FC002B1ED04D590031E8DE /* cube.obj in Resources */,
 				07FF586E1ED3165A00FB6AB0 /* Fish.obj in Resources */,
 				07FC00351ED04D590031E8DE /* floor.mtl in Resources */,
+				0788F4791ED32A7200EAA604 /* Chest.obj in Resources */,
 				07FF58671ED3165A00FB6AB0 /* crab.jpg in Resources */,
 				07FC00231ED04D590031E8DE /* converse_obj.obj in Resources */,
 				07FC00341ED04D590031E8DE /* floor_old.obj in Resources */,
@@ -914,6 +930,7 @@
 				07FC00211ED04D590031E8DE /* converse_bump.jpg in Resources */,
 				07FC00471ED04D590031E8DE /* skybox.obj in Resources */,
 				07FC00271ED04D590031E8DE /* crystal_s.png in Resources */,
+				0788F4761ED32A7200EAA604 /* Chest_ao.jpg in Resources */,
 				07FC00121ED04D590031E8DE /* blurShader.vert in Resources */,
 				07FF58701ED3165A00FB6AB0 /* jh_spanish_doubloon_1_P5973_x_800.jpg in Resources */,
 				07FF586C1ED3165A00FB6AB0 /* fish.jpg in Resources */,
@@ -934,6 +951,7 @@
 				07FC004F1ED04D590031E8DE /* under water models in Resources */,
 				07FC003F1ED04D590031E8DE /* lambis_truncata_shell.frag in Resources */,
 				07FC000C1ED04D590031E8DE /* AG01_1.obj in Resources */,
+				0788F4771ED32A7200EAA604 /* Chest_diffuse.jpg in Resources */,
 				07FC004A1ED04D590031E8DE /* Submarine.obj in Resources */,
 				07FC00221ED04D590031E8DE /* converse_obj.mtl in Resources */,
 				07FC00251ED04D590031E8DE /* crystal_d.png in Resources */,
@@ -948,6 +966,7 @@
 				07FC00491ED04D590031E8DE /* sttionry.jpg in Resources */,
 				07FC000E1ED04D590031E8DE /* AG01lef2.tif in Resources */,
 				07FC004C1ED04D590031E8DE /* torch.mtl in Resources */,
+				0788F47A1ED32A7200EAA604 /* under water models in Resources */,
 				07FC00131ED04D590031E8DE /* border.frag in Resources */,
 				B4CB8CD01B72E43300FE041B /* Project-Info.plist in Resources */,
 				07FF586A1ED3165A00FB6AB0 /* dune.obj in Resources */,
@@ -971,6 +990,7 @@
 				07FC001B1ED04D590031E8DE /* cave_stream.obj in Resources */,
 				07FC00111ED04D590031E8DE /* blurShader.frag in Resources */,
 				07FC00311ED04D590031E8DE /* flame.obj in Resources */,
+				0788F4781ED32A7200EAA604 /* Chest.mtl in Resources */,
 				07FC00191ED04D590031E8DE /* cave_stream.frag in Resources */,
 				07FC002F1ED04D590031E8DE /* flame.frag in Resources */,
 				07FF58661ED3165A00FB6AB0 /* bubinga_gemasert_color.jpg in Resources */,
