@@ -35,11 +35,15 @@ uniform vec3 lightDiffuseColor_3;
 uniform vec3 lightSpecularColor_3;
 varying vec3 lightVectorTangentSpace_3;
 varying float intensityBasedOnDist_3;
+uniform sampler2D CustomMap_1;
+uniform sampler2D DiffuseMap;
 varying vec3 surfaceToCameraTangentSpace;
 varying vec3 n;
 varying vec3 surfaceToCamera;
+varying vec2 causticTexCoord;
 uniform vec3 ambientColor;
 uniform vec3 Kd;
+uniform float offset;
 
 void main() {
 	vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
@@ -78,8 +82,17 @@ void main() {
 		intensity = clamp(intensity, 0.0, 1.0);
 		diffuse += vec4(lightDiffuseColor_3 * (intensity * intensityBasedOnDist_3), 0.0);
 	}
-	
-	diffuse = diffuse * vec4(Kd,1.0);
 
-	gl_FragColor = clamp(diffuse + 0.1, 0.0, 1.0);
+	// Caustic effect
+	vec2 uv = causticTexCoord;
+	vec2 dt;
+	dt.x = sin(uv.y * 50.0 + offset / 2) / 250.0;
+	dt.y = sin(uv.x * 10.0 + offset / 2
+	) / 100.0;
+	
+	vec3 causticColor = texture2D(CustomMap_1, uv + dt).xyz;
+
+	vec4 color = diffuse * vec4(Kd, 1.0) + vec4(causticColor / 3, 1.0);
+	gl_FragColor = clamp(color, 0.0, 1.0);
+	// gl_FragColor = vec4(causticColor, 1.0, 1.0);
 }
