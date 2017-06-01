@@ -50,7 +50,7 @@ attribute vec4 TexCoord;
 void main() {
 	vec4 posViewSpace = ModelViewMatrix*Position;
 	surfaceToCamera = - posViewSpace.xyz;
-	causticTexCoord = Position.xz;
+	causticTexCoord = vec2((Position.x + 500) / 1000, Position.z / 1000) * 2;
 	float lightDistance = 0.0;
 	vec3 vertexNormal_ViewSpace = mat3(ModelViewMatrix) * Normal;
 	n = vertexNormal_ViewSpace;

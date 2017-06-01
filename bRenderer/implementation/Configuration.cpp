@@ -57,6 +57,9 @@ namespace bRenderer
 	std::string DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP() { return jsonValue.get("DEFAULT_SHADER_UNIFORM_DIFFUSE_MAP", "DiffuseMap").asString(); }
 	std::string DEFAULT_SHADER_UNIFORM_SPECULAR_MAP() { return jsonValue.get("DEFAULT_SHADER_UNIFORM_SPECULAR_MAP", "SpecularMap").asString(); }
 	std::string DEFAULT_SHADER_UNIFORM_NORMAL_MAP() { return jsonValue.get("DEFAULT_SHADER_UNIFORM_NORMAL_MAP", "NormalMap").asString(); }
+	std::string DEFAULT_SHADER_CUSTOM_MAP_1() { return jsonValue.get("DEFAULT_SHADER_CUSTOM_MAP_1", "CustomMap_1").asString(); }
+	std::string DEFAULT_SHADER_CUSTOM_MAP_2() { return jsonValue.get("DEFAULT_SHADER_CUSTOM_MAP_2", "CustomMap_2").asString(); }
+	std::string DEFAULT_SHADER_CUSTOM_MAP_3() { return jsonValue.get("DEFAULT_SHADER_CUSTOM_MAP_3", "CustomMap_3").asString(); }
 	std::string DEFAULT_SHADER_UNIFORM_CUBE_MAP() { return jsonValue.get("DEFAULT_SHADER_UNIFORM_CUBE_MAP", "CubeMap").asString(); }
 	std::string DEFAULT_SHADER_UNIFORM_SPHERE_MAP() { return jsonValue.get("DEFAULT_SHADER_UNIFORM_SPHERE_MAP", "SphereMap").asString(); }
 	std::string DEFAULT_SHADER_UNIFORM_CHARACTER_MAP() { return jsonValue.get("DEFAULT_SHADER_UNIFORM_CHARACTER_MAP", "CharacterMap").asString(); }
@@ -95,6 +98,9 @@ namespace bRenderer
 	std::string WAVEFRONT_MATERIAL_DIFFUSE_MAP() { return jsonValue.get("WAVEFRONT_MATERIAL_DIFFUSE_MAP", "map_Kd").asString(); }
 	std::string WAVEFRONT_MATERIAL_SPECULAR_MAP() { return jsonValue.get("WAVEFRONT_MATERIAL_SPECULAR_MAP", "map_Ks").asString(); }
 	std::string WAVEFRONT_MATERIAL_NORMAL_MAP() { return jsonValue.get("WAVEFRONT_MATERIAL_NORMAL_MAP", "map_Bump").asString(); }
+	std::string CUSTOM_MAP_1() { return jsonValue.get("CUSTOM_MAP_1", "map_Custom1").asString(); }
+	std::string CUSTOM_MAP_2() { return jsonValue.get("CUSTOM_MAP_2", "map_Custom2").asString(); }
+	std::string CUSTOM_MAP_3() { return jsonValue.get("CUSTOM_MAP_3", "map_Custom3").asString(); }
 	std::string WAVEFRONT_MATERIAL_DISSOLVE() { return jsonValue.get("WAVEFRONT_MATERIAL_DISSOLVE", "d").asString(); }
 	std::string WAVEFRONT_MATERIAL_REFLECTION() { return jsonValue.get("WAVEFRONT_MATERIAL_REFLECTION", "refl").asString(); }
 	std::string WAVEFRONT_MATERIAL_REFLECTION_TYPE() { return jsonValue.get("WAVEFRONT_MATERIAL_REFLECTION_TYPE", "-type").asString(); }

@@ -449,6 +449,21 @@ void OBJLoader::loadObjMtl(const std::string &fileName, MaterialMap &materials, 
 				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_UNIFORM_NORMAL_MAP()];
 				ss >> mat >> std::ws;
 			}
+			else if (key == bRenderer::CUSTOM_MAP_1())
+			{
+				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_CUSTOM_MAP_1()];
+				ss >> mat >> std::ws;
+			}
+			else if (key == bRenderer::CUSTOM_MAP_2())
+			{
+				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_CUSTOM_MAP_2()];
+				ss >> mat >> std::ws;
+			}
+			else if (key == bRenderer::CUSTOM_MAP_3())
+			{
+				auto &mat = materials[matName].textures[bRenderer::DEFAULT_SHADER_CUSTOM_MAP_3()];
+				ss >> mat >> std::ws;
+			}
 			else if (key == bRenderer::WAVEFRONT_MATERIAL_DISSOLVE())
 			{
 				GLfloat d;
