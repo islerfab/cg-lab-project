@@ -62,7 +62,7 @@ void main() {
 	mat3 TBN = mat3(firstRow, secondRow, thirdRow);
 	surfaceToCameraTangentSpace = TBN*( - posViewSpace.xyz );
 
-	// First light
+	// HEAD LAMP
 	lightVectorTangentSpace_0 = TBN*(lightPositionViewSpace_0.xyz - posViewSpace.xyz);
 	lightDistance = distance(posViewSpace, lightPositionViewSpace_0);
 	intensityBasedOnDist_0 = 0.0;

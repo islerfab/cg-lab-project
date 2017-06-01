@@ -172,6 +172,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 {
 	// Set offset
 	bRenderer().getObjects()->getProperties("causticProperties")->setScalar("offset", _offset);		// pass offset for wave effect
+	bRenderer().getObjects()->getProperties("causticProperties")->setVector("waterAmbient", vmml::Vector3f(0.1, 0.1f, 0.15f));		// pass ambient color (could be changing dynamically)
 
 	// Cube
 	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 0.0f)) * vmml::create_scaling(vmml::Vector3f(2.0f));
