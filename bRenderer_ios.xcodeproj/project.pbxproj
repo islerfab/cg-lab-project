@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		071A6A3F1EF149EC009DC7C7 /* bubble.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 071A6A3D1EF149EC009DC7C7 /* bubble.mtl */; };
+		071A6A401EF149EC009DC7C7 /* bubble.obj in Resources */ = {isa = PBXBuildFile; fileRef = 071A6A3E1EF149EC009DC7C7 /* bubble.obj */; };
+		071A6A431EF15138009DC7C7 /* object1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 071A6A411EF15138009DC7C7 /* object1.mtl */; };
+		071A6A441EF15138009DC7C7 /* object1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 071A6A421EF15138009DC7C7 /* object1.obj */; };
+		071A6A471EF1516F009DC7C7 /* object1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 071A6A451EF1516F009DC7C7 /* object1.mtl */; };
+		071A6A481EF1516F009DC7C7 /* object1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 071A6A461EF1516F009DC7C7 /* object1.obj */; };
 		07F8CE3B1EF1364F0026F57E /* AG01_1_old.obj in Resources */ = {isa = PBXBuildFile; fileRef = 07F8CDF01EF1364F0026F57E /* AG01_1_old.obj */; };
 		07F8CE3C1EF1364F0026F57E /* AG01_1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 07F8CDF11EF1364F0026F57E /* AG01_1.mtl */; };
 		07F8CE3D1EF1364F0026F57E /* AG01_1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 07F8CDF21EF1364F0026F57E /* AG01_1.obj */; };
@@ -181,6 +187,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		071A6A3D1EF149EC009DC7C7 /* bubble.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bubble.mtl; path = ../../../objects/bubble.mtl; sourceTree = "<group>"; };
+		071A6A3E1EF149EC009DC7C7 /* bubble.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bubble.obj; path = ../../../objects/bubble.obj; sourceTree = "<group>"; };
+		071A6A411EF15138009DC7C7 /* object1.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = object1.mtl; path = ../../../objects/object1.mtl; sourceTree = "<group>"; };
+		071A6A421EF15138009DC7C7 /* object1.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = object1.obj; path = ../../../objects/object1.obj; sourceTree = "<group>"; };
+		071A6A451EF1516F009DC7C7 /* object1.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = object1.mtl; path = ../../../objects/object1.mtl; sourceTree = "<group>"; };
+		071A6A461EF1516F009DC7C7 /* object1.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = object1.obj; path = ../../../objects/object1.obj; sourceTree = "<group>"; };
 		07F8CDF01EF1364F0026F57E /* AG01_1_old.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AG01_1_old.obj; sourceTree = "<group>"; };
 		07F8CDF11EF1364F0026F57E /* AG01_1.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AG01_1.mtl; sourceTree = "<group>"; };
 		07F8CDF21EF1364F0026F57E /* AG01_1.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AG01_1.obj; sourceTree = "<group>"; };
@@ -475,6 +487,8 @@
 				07F8CDF11EF1364F0026F57E /* AG01_1.mtl */,
 				07F8CDF21EF1364F0026F57E /* AG01_1.obj */,
 				07F8CDF31EF1364F0026F57E /* AG01brn1.tif */,
+				071A6A3D1EF149EC009DC7C7 /* bubble.mtl */,
+				071A6A3E1EF149EC009DC7C7 /* bubble.obj */,
 				07F8CDF41EF1364F0026F57E /* AG01lef2.tif */,
 				07F8CDF51EF1364F0026F57E /* arial.ttf */,
 				07F8CDF61EF1364F0026F57E /* basicTitle_light.png */,
@@ -532,10 +546,14 @@
 				07F8CE2A1EF1364F0026F57E /* laces.jpg */,
 				07F8CE2B1EF1364F0026F57E /* lambis_truncata_shell.frag */,
 				07F8CE2C1EF1364F0026F57E /* lambis_truncata_shell.mtl */,
+				071A6A411EF15138009DC7C7 /* object1.mtl */,
+				071A6A421EF15138009DC7C7 /* object1.obj */,
 				07F8CE2D1EF1364F0026F57E /* lambis_truncata_shell.obj */,
 				07F8CE2E1EF1364F0026F57E /* lambis_truncata_shell.vert */,
 				07F8CE2F1EF1364F0026F57E /* ring.mtl */,
 				07F8CE301EF1364F0026F57E /* ring.obj */,
+				071A6A451EF1516F009DC7C7 /* object1.mtl */,
+				071A6A461EF1516F009DC7C7 /* object1.obj */,
 				07F8CE311EF1364F0026F57E /* sandfloor.frag */,
 				07F8CE321EF1364F0026F57E /* sandfloor.vert */,
 				07F8CE331EF1364F0026F57E /* skybox.obj */,
@@ -872,6 +890,7 @@
 				07F8CE421EF1364F0026F57E /* blurShader.frag in Resources */,
 				07F8CE7C1EF1364F0026F57E /* sandfloor.frag in Resources */,
 				07F8CE551EF1364F0026F57E /* Chest.obj in Resources */,
+				071A6A431EF15138009DC7C7 /* object1.mtl in Resources */,
 				07F8CE601EF1364F0026F57E /* cube.mtl in Resources */,
 				07F8CE411EF1364F0026F57E /* basicTitle_light.png in Resources */,
 				07F8CE691EF1364F0026F57E /* flame.png in Resources */,
@@ -881,6 +900,7 @@
 				07F8CE5E1EF1364F0026F57E /* crystal.mtl in Resources */,
 				07F8CE731EF1364F0026F57E /* jellyfish.obj in Resources */,
 				07F8CE831EF1364F0026F57E /* torch.mtl in Resources */,
+				071A6A3F1EF149EC009DC7C7 /* bubble.mtl in Resources */,
 				07F8CE741EF1364F0026F57E /* KozGoPro-ExtraLight.otf in Resources */,
 				07F8CE461EF1364F0026F57E /* bump_texture_shell.png in Resources */,
 				07F8CE6E1EF1364F0026F57E /* hazelnut_diff.tga in Resources */,
@@ -893,16 +913,19 @@
 				07F8CE801EF1364F0026F57E /* sttionry.jpg in Resources */,
 				07F8CE761EF1364F0026F57E /* lambis_truncata_shell.frag in Resources */,
 				07F8CE7D1EF1364F0026F57E /* sandfloor.vert in Resources */,
+				071A6A401EF149EC009DC7C7 /* bubble.obj in Resources */,
 				07F8CE821EF1364F0026F57E /* texture_shell.png in Resources */,
 				07F8CE711EF1364F0026F57E /* hazelnut.obj in Resources */,
 				07F8CE441EF1364F0026F57E /* border.frag in Resources */,
 				07F8CE451EF1364F0026F57E /* border.vert in Resources */,
 				07F8CE5F1EF1364F0026F57E /* crystal.obj in Resources */,
+				071A6A481EF1516F009DC7C7 /* object1.obj in Resources */,
 				07F8CE531EF1364F0026F57E /* Chest_diffuse.jpg in Resources */,
 				B4794A311BA6743D00B5E9DC /* LICENSE.txt in Resources */,
 				07F8CE7A1EF1364F0026F57E /* ring.mtl in Resources */,
 				07F8CE4F1EF1364F0026F57E /* cave.mtl in Resources */,
 				07F8CE581EF1364F0026F57E /* converse_obj.mtl in Resources */,
+				071A6A471EF1516F009DC7C7 /* object1.mtl in Resources */,
 				07F8CE501EF1364F0026F57E /* cave.obj in Resources */,
 				B4794A2A1BA6743D00B5E9DC /* LICENSE.txt in Resources */,
 				07F8CE431EF1364F0026F57E /* blurShader.vert in Resources */,
@@ -930,6 +953,7 @@
 				07F8CE721EF1364F0026F57E /* jellyfish.mtl in Resources */,
 				07F8CE811EF1364F0026F57E /* Submarine.obj in Resources */,
 				07F8CE631EF1364F0026F57E /* dune.mtl in Resources */,
+				071A6A441EF15138009DC7C7 /* object1.obj in Resources */,
 				07F8CE3B1EF1364F0026F57E /* AG01_1_old.obj in Resources */,
 				07F8CE4D1EF1364F0026F57E /* cave_stream.obj in Resources */,
 				07F8CE7F1EF1364F0026F57E /* sparks.png in Resources */,
