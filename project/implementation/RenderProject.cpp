@@ -57,7 +57,7 @@ void RenderProject::initFunction()
 	// create text sprites
 	FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
 	if (Input::isTouchDevice())
-    bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(0,0,255), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);
+    bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);
 	else
 		bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
 
