@@ -86,16 +86,16 @@ void main() {
 	// Caustic effect
 	vec2 uv = causticTexCoord;
 	vec2 dt;
-	dt.x = sin(uv.y * 50.0 + offset / 2) / 250.0;
-	dt.y = sin(uv.x * 10.0 + offset / 2) / 100.0;
+	dt.x = sin(uv.y * 50.0 + offset / 2.0) / 250.0;
+	dt.y = sin(uv.x * 10.0 + offset / 2.0) / 100.0;
 	
-	vec3 causticColor = texture2D(CustomMap_1, uv + dt).xyz / 2;	// Reduce intensity a bit by dividing it by 2
+	vec3 causticColor = texture2D(CustomMap_1, uv + dt).xyz / 2.0;	// Reduce intensity a bit by dividing it by 2
 
 	vec4 color = diffuse * vec4(Kd, 1.0) + vec4(causticColor, 1.0);
 
 	// Fog effect
 	float fogFactor = pow(0.98, distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));
-	color.rgb = color.rgb * fogFactor + (1 - fogFactor) * waterAmbient;
+	color.rgb = color.rgb * fogFactor + (1.0 - fogFactor) * waterAmbient;
 
 	
 	gl_FragColor = clamp(color, 0.0, 1.0);
