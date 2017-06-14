@@ -179,25 +179,25 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	// Cube
 	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 0.0f)) * vmml::create_scaling(vmml::Vector3f(2.0f));
 	// submit to render queue
-	bRenderer().getModelRenderer()->queueModelInstance("cube", "cube_instance", camera, modelMatrix * vmml::create_scaling(vmml::Vector3f(4.0f)), std::vector<std::string>({ "headLamp" }));
+	bRenderer().getModelRenderer()->queueModelInstance("cube", "cube_instance", camera, modelMatrix * vmml::create_scaling(vmml::Vector3f(20.0f)), std::vector<std::string>({ "headLamp" }));
 
 	// Floor
-	modelMatrix = vmml::create_translation(vmml::Vector3f(5.0f, -199.0f, 5.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f)) * vmml::create_translation(vmml::Vector3f(-500.0f, 0.0f, 0.0f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(5.0f, -100.0f, 5.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f)) * vmml::create_translation(vmml::Vector3f(-500.0f, 0.0f, 0.0f));
 	// First quarter
 	bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 	// Second quarter
-	modelMatrix = vmml::create_translation(vmml::Vector3f(-5.0f, -199.0f, 5.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f)) * vmml::create_translation(vmml::Vector3f(500.0f, 0.0f, 0.0f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(-5.0f, -100.0f, 5.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f)) * vmml::create_translation(vmml::Vector3f(500.0f, 0.0f, 0.0f));
 	bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance2", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 	// Third quarter
-	modelMatrix = vmml::create_translation(vmml::Vector3f(5.0f, -199.0f, -5.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f)) * vmml::create_translation(vmml::Vector3f(-500.0f, 0.0f, 1000.0f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(5.0f, -100.0f, -5.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f)) * vmml::create_translation(vmml::Vector3f(-500.0f, 0.0f, 1000.0f));
 	bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance3", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 	// Fourth quarter
-	modelMatrix = vmml::create_translation(vmml::Vector3f(-5.0f, -199.0f, -5.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f)) * vmml::create_translation(vmml::Vector3f(500.0f, 0.0f, 1000.0f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(-5.0f, -100.0f, -5.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f)) * vmml::create_translation(vmml::Vector3f(500.0f, 0.0f, 1000.0f));
 	bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance4", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 
     
     
-    bRenderer().getModelRenderer()->queueModelInstance("object1", "bubble_instance", camera, modelMatrix * vmml::create_scaling(vmml::Vector3f(2.0f)), std::vector<std::string>({ "headLamp" }));
+    bRenderer().getModelRenderer()->queueModelInstance("object1", "bubble_instance", camera, modelMatrix * vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 00.0f)) *vmml::create_translation(vmml::Vector3f(-400.0f, 10.0f, -1000.0f))* vmml::create_scaling(vmml::Vector3f(2.0f)), std::vector<std::string>({ "headLamp" }));
     
     
     
@@ -207,7 +207,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			// translate and scale
-			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f, -198.0f, j*5.0f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
+			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f, -98.0f, j*5.0f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
 			// submit to render queue
 			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
 			bRenderer().getModelRenderer()->queueModelInstance("AG01_1", &"plant_" [ count++], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
@@ -219,7 +219,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     /*** Treasure ***/
     
     // translate and scale
-    modelMatrix = vmml::create_translation(vmml::Vector3f(10*5.0f, -198.0f, 10*5.0f)) * vmml::create_scaling(vmml::Vector3f(0.24f));
+    modelMatrix = vmml::create_translation(vmml::Vector3f(10*5.0f, -98.0f, 10*5.0f)) * vmml::create_scaling(vmml::Vector3f(0.24f));
     // submit to render queue
     // bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
     bRenderer().getModelRenderer()->queueModelInstance("Chest", "treasure", camera, modelMatrix, std::vector<std::string>({ "headLamp" }));    
@@ -229,7 +229,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			// translate and scale
-			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f-1.0, -198.0f, j*5.0-1.0f)) * vmml::create_scaling(vmml::Vector3f(10.0f));
+			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f-1.0, -98.0f, j*5.0-1.0f)) * vmml::create_scaling(vmml::Vector3f(10.0f));
 			// submit to render queue
 			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
 			bRenderer().getModelRenderer()->queueModelInstance("lambis_truncata_shell", &"shell_instance_" [ count++], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
