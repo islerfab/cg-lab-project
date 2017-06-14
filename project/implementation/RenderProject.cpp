@@ -1,5 +1,9 @@
 #include "RenderProject.h"
 
+
+#include <stdio.h>
+#include <time.h>
+
 /* Initialize the Project */
 void RenderProject::init()
 {
@@ -16,6 +20,10 @@ void RenderProject::init()
 	bRenderer().runRenderer();
 }
 
+int counter = 0;
+int air = 100;
+
+
 /* This function is executed when initializing the renderer */
 void RenderProject::initFunction()
 {
@@ -27,6 +35,9 @@ void RenderProject::initFunction()
 	_offset = 0.0f;
 	_randomOffset = 0.0f;
 	_cameraSpeed = 40.0f;
+   
+
+    
 	_running = false; _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
 	_viewMatrixHUD = Camera::lookAt(vmml::Vector3f(0.0f, 0.0f, 0.25f), vmml::Vector3f::ZERO, vmml::Vector3f::UP);
 
@@ -54,18 +65,23 @@ void RenderProject::initFunction()
 
 
 	// create sprites
-	bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");							// create a sprite displaying the title as a texture
+	//bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");							// create a sprite displaying the title as a texture
 
 	// create text sprites
 	FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
-	if (Input::isTouchDevice())
-    bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);
-	else
-		bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
+    if (Input::isTouchDevice()){
+        
+    bRenderer().getObjects()->createTextSprite("gamename", vmml::Vector3f(1,1,1), "TREASURE SEEKER", font);
+    
+        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);}
+    else{
+        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);}
 
 	// create camera
 	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
 
+
+    
 	// create lights
 	// bRenderer().getObjects()->createLight("dayLight", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(1.0f, 0.85f, 0.7f), 10.0f, 0.01f, 300.0);
 	bRenderer().getObjects()->createLight("headLamp", -bRenderer().getObjects()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 1.0f, 1.0f), 1000.0f, 0.5f, 300.0f);
@@ -129,7 +145,7 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
 		modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
         // draw
-		bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("bTitle"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false);
+		// bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("bTitle"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false);
 
 		/*** Instructions ***/
         titleScale = 0.08f;
@@ -137,18 +153,52 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), -0.6f, -0.65f)) * scaling;
         // draw
         bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+        
+        titleScale = 0.18f;
+        scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.6f, -0.65f)) * scaling;
+        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gamename"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+
 
     }
 
 	//// Camera Movement ////
 	updateCamera("camera", deltaTime);
-	
+
+    
 	// Change the deltas for waves
 	if (_running) {
 		if (deltaTime > 0.0f) {
 			_offset += 5 * deltaTime;
 			_randomOffset += (randomNumber(10.0f, 20.0f)) * deltaTime;
 		}
+    
+        FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
+        //game state
+        bRenderer().getObjects()->createTextSprite("gameState", vmml::Vector3f(1,1,1), "air: " + std::to_string(100) + "%"  , font);
+        clock_t start_time = clock();
+        int airLeft = 100;
+    
+        if((int)(start_time/10000) % 12 > 10)
+        {
+            airLeft = air-counter;
+            counter++;
+        }
+        
+        //game state
+        bRenderer().getObjects()->createTextSprite("gameState"+ std::to_string(counter), vmml::Vector3f(1,1,1), "air: " + std::to_string(airLeft) + "%"  , font);
+        
+        vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
+        
+        GLfloat titleScale = 0.1f;
+        vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
+        
+        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.7f, -0.65f)) * scaling;
+        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameState"+std::to_string(counter)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+        
+       
+
 	}
 
 	//// Head Lamp ////
@@ -196,8 +246,14 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance4", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 
     
+    /*** bubbles ***/
+    int bubbles = 0;
+    for (float i = 0; i < 3; i++) {
+        for (float j = 0; j < 3; j++) {
+    bRenderer().getModelRenderer()->queueModelInstance("object1", &"bubble_instance" [ bubbles++] , camera, modelMatrix * vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 00.0f)) *vmml::create_translation(vmml::Vector3f(i * -400.0f, 10.0f, j* -1000.0f)) * vmml::create_scaling(vmml::Vector3f(2.0f)), std::vector<std::string>({ "headLamp" }));
+        }
+    }
     
-    bRenderer().getModelRenderer()->queueModelInstance("object1", "bubble_instance", camera, modelMatrix * vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 00.0f)) *vmml::create_translation(vmml::Vector3f(-400.0f, 10.0f, -1000.0f))* vmml::create_scaling(vmml::Vector3f(2.0f)), std::vector<std::string>({ "headLamp" }));
     
     
     
@@ -235,7 +291,8 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 			bRenderer().getModelRenderer()->queueModelInstance("lambis_truncata_shell", &"shell_instance_" [ count++], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
 		}
 	}
-	
+    
+    
 	// reset ambient color
 	bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
@@ -336,8 +393,13 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
 		}
 	}
 
+
+    
 	//// Update camera ////
 	if (_running){
+        
+        
+        
 		bRenderer().getObjects()->getCamera(camera)->moveCameraForward(cameraForward*_cameraSpeed*deltaTime);
 		bRenderer().getObjects()->getCamera(camera)->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
 		bRenderer().getObjects()->getCamera(camera)->moveCameraSideward(cameraSideward*_cameraSpeed*deltaTime);
@@ -347,6 +409,7 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
 		}
 	}	
 }
+
 
 /* For iOS only: Handle device rotation */
 void RenderProject::deviceRotated()
@@ -366,6 +429,8 @@ void RenderProject::appWillResignActive()
 		bRenderer().stopRenderer();
 	}
 }
+
+
 
 /* For iOS only: Handle app coming back from background */
 void RenderProject::appDidBecomeActive()
