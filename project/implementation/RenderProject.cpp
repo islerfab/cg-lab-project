@@ -69,13 +69,18 @@ void RenderProject::initFunction()
 
 	// create text sprites
 	FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
-    if (Input::isTouchDevice()){
-        
+    
     bRenderer().getObjects()->createTextSprite("gamename", vmml::Vector3f(1,1,1), "TREASURE SEEKER", font);
     
+    bRenderer().getObjects()->createTextSprite("gameOver", vmml::Vector3f(1,1,1), "GAME OVER", font);
+    
+    
+    if (Input::isTouchDevice()){
+        
+        
         bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);}
     else{
-        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);}
+        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);}
 
 	// create camera
 	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
@@ -197,7 +202,43 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.7f, -0.65f)) * scaling;
         bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameState"+std::to_string(counter)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
         
-       
+        if(airLeft == 0){
+            
+            /// GAME OVER ///
+            vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
+            // blur vertically and horizontally
+            bool b = true;		int numberOfBlurSteps = 2;
+            for (int i = 0; i < numberOfBlurSteps; i++) {
+                if (i == numberOfBlurSteps - 1){
+                    bRenderer().getObjects()->getFramebuffer("fbo")->unbind(defaultFBO); //unbind (original fbo will be bound)
+                    bRenderer().getView()->setViewportSize(bRenderer().getView()->getWidth(), bRenderer().getView()->getHeight());								// reset vieport size
+                }
+                else
+                    bRenderer().getObjects()->getFramebuffer("fbo")->bindTexture(bRenderer().getObjects()->getTexture(b ? "fbo_texture2" : "fbo_texture1"), false);
+                bRenderer().getObjects()->getMaterial("blurMaterial")->setTexture("fbo_texture", bRenderer().getObjects()->getTexture(b ? "fbo_texture1" : "fbo_texture2"));
+                bRenderer().getObjects()->getMaterial("blurMaterial")->setScalar("isVertical", static_cast<GLfloat>(b));
+                // draw
+                bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("blurSprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+                b = !b;
+            }
+            
+            
+            GLfloat titleScale = 0.5f;
+            vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+            modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
+            // draw
+            // bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("bTitle"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false);
+            
+            /*** Instructions ***/
+            titleScale = 0.08f;
+            scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+            modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), -0.6f, -0.65f)) * scaling;
+            // draw
+            bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameOver"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+            
+            _running = !_running;
+
+        }
 
 	}
 
