@@ -36,20 +36,21 @@ void RenderProject::initFunction()
 
 	// load materials and shaders before loading the model
 	ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", { 2, true, true, true, true, true, true, true, true, true, false, false, false });	// automatically generates a shader with a maximum of 2 lights
-		// ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile_o("flame", 0, AMBIENT_LIGHTING);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
-		// MaterialPtr flameMaterial = bRenderer().getObjects()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
+	// ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile_o("flame", 0, AMBIENT_LIGHTING);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
+	// MaterialPtr flameMaterial = bRenderer().getObjects()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
 
 	// create additional properties for a model
 	PropertiesPtr causticProperties = bRenderer().getObjects()->createProperties("causticProperties");
 
 	// load models
 	bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
-	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE);				
+	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE);
 	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
 	bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
-    
     bRenderer().getObjects()->loadObjModel_o("Chest.obj", customShader, FLIP_Z);									// the custom shader created above is used
-
+	bRenderer().getObjects()->loadObjModel_o("plane.obj", 4, SHADER_FROM_FILE);
+	bRenderer().getObjects()->loadObjModel_o("shark.obj", 4, SHADER_FROM_FILE);
+	bRenderer().getObjects()->loadObjModel_o("submarine.obj", 4, SHADER_FROM_FILE);
 
 	// create sprites
 	bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");							// create a sprite displaying the title as a texture
@@ -193,9 +194,17 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	modelMatrix = vmml::create_translation(vmml::Vector3f(-5.0f, -199.0f, -5.0f)) * vmml::create_scaling(vmml::Vector3f(0.22f)) * vmml::create_translation(vmml::Vector3f(500.0f, 0.0f, 1000.0f));
 	bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance4", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 
+	// plane
+	modelMatrix = vmml::create_translation(vmml::Vector3f(10.0f, -180.0f, 10.0f)) * vmml::create_rotation(float(45 * M_PI / 180), vmml::Vector3f::UNIT_X) * vmml::create_rotation(float (45 * M_PI / 180), vmml::Vector3f::UNIT_Z) * vmml::create_scaling(vmml::Vector3f(0.22f));
+	bRenderer().getModelRenderer()->queueModelInstance("plane", "plane_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
-    
-    
+	// shark
+	modelMatrix = vmml::create_translation(vmml::Vector3f(-20.0f, -170.0f, 10.0f)) * vmml::create_scaling(vmml::Vector3f(0.4f));
+	bRenderer().getModelRenderer()->queueModelInstance("shark", "shark_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
+
+	// submarine
+	modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 0.0f)) * vmml::create_scaling(vmml::Vector3f(0.4f));
+	bRenderer().getModelRenderer()->queueModelInstance("submarine", "submarine_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
     
 	/*** Plants ***/
