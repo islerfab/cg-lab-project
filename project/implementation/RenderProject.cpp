@@ -42,6 +42,12 @@ void RenderProject::initFunction()
 	// create additional properties for a model
 	PropertiesPtr causticProperties = bRenderer().getObjects()->createProperties("causticProperties");
 
+	// fill arrays for plants
+	for (int i = 0; i < NO_PLANTS; i++) {
+		plantSizes[i] = rand() % 71 + 30;
+		plantLocs[i] = vmml::Vector3f(float(rand() % 400 - 200), -198.0f, float(rand() % 400 - 200));
+	}
+
 	// load models
 	bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
 	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE);
@@ -51,6 +57,8 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("plane.obj", 4, SHADER_FROM_FILE);
 	bRenderer().getObjects()->loadObjModel_o("shark.obj", 4, SHADER_FROM_FILE);
 	bRenderer().getObjects()->loadObjModel_o("submarine.obj", 4, SHADER_FROM_FILE);
+	bRenderer().getObjects()->loadObjModel_o("rock.obj", 4, SHADER_FROM_FILE);
+	bRenderer().getObjects()->loadObjModel_o("debris.obj", 4, SHADER_FROM_FILE);
 
 	// create sprites
 	bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");							// create a sprite displaying the title as a texture
@@ -203,26 +211,27 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	bRenderer().getModelRenderer()->queueModelInstance("shark", "shark_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 
 	// submarine
-	modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 0.0f)) * vmml::create_scaling(vmml::Vector3f(0.4f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(10.0f, -20.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(0.4f));
 	bRenderer().getModelRenderer()->queueModelInstance("submarine", "submarine_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
+
+	// rock
+	modelMatrix = vmml::create_translation(vmml::Vector3f(30.0f, -190.0f, 30.0f)) * vmml::create_scaling(vmml::Vector3f(0.2f));
+	bRenderer().getModelRenderer()->queueModelInstance("rock", "rock_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
+
+	// debris
+	modelMatrix = vmml::create_translation(vmml::Vector3f(30.0f, -190.0f, -70.0f)) * vmml::create_scaling(vmml::Vector3f(2.2f));
+	bRenderer().getModelRenderer()->queueModelInstance("debris", "debris_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
     
 	/*** Plants ***/
-	int count = 0;
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			// translate and scale
-			modelMatrix = vmml::create_translation(vmml::Vector3f(i*5.0f, -198.0f, j*5.0f)) * vmml::create_scaling(vmml::Vector3f(30.0f));
-			// submit to render queue
-			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
-			bRenderer().getModelRenderer()->queueModelInstance("AG01_1", &"plant_" [ count++], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
-		}
+	for (int i = 0; i < NO_PLANTS; i++) {
+		modelMatrix = vmml::create_translation(plantLocs[i]) * vmml::create_scaling(plantSizes[i]);
+		// submit to render queue
+		// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
+		bRenderer().getModelRenderer()->queueModelInstance("AG01_1", &"plant_" [i], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
 	}
     
-    
-    
     /*** Treasure ***/
-    
     // translate and scale
     modelMatrix = vmml::create_translation(vmml::Vector3f(10*5.0f, -198.0f, 10*5.0f)) * vmml::create_scaling(vmml::Vector3f(0.24f));
     // submit to render queue
@@ -230,7 +239,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     bRenderer().getModelRenderer()->queueModelInstance("Chest", "treasure", camera, modelMatrix, std::vector<std::string>({ "headLamp" }));    
     
 	/*** Shells ***/
-	count = 0;
+	int count = 0;
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
 			// translate and scale
@@ -347,9 +356,10 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
 		bRenderer().getObjects()->getCamera(camera)->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
 		bRenderer().getObjects()->getCamera(camera)->moveCameraSideward(cameraSideward*_cameraSpeed*deltaTime);
 		vmml::Vector3f newcampos = bRenderer().getObjects()->getCamera(camera)->getPosition();
-		if ((newcampos.y() < -30.0f) || (newcampos.y() > 23.0f)){
-			// bRenderer().getObjects()->getCamera(camera)->setPosition(oldcampos);
-		}
+		/*if ((newcampos.y() < -30.0f) || (newcampos.y() > 23.0f)){
+			bRenderer().getObjects()->getCamera(camera)->setPosition(oldcampos);
+		}*/
+		//std::cout << bRenderer().getObjects()->getCamera(camera)->getPosition() << std::endl;
 	}	
 }
 

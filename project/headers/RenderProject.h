@@ -64,6 +64,10 @@ private:
 	GLint _lastStateSpaceKey = 0;
 	vmml::Matrix4f _viewMatrixHUD;
 
+	/* plants */
+	static const int NO_PLANTS = 10;
+	float plantSizes[NO_PLANTS];
+	vmml::Vector3f plantLocs[NO_PLANTS];
 };
 
 #endif /* defined(PROJECT_MAIN_H) */
