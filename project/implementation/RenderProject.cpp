@@ -49,7 +49,10 @@ void RenderProject::initFunction()
 	}
 
 	// set position of shark
-	sharkPos = vmml::Vector3f(-20.0f, -170.0f, 10.0f);
+	sharkPos = vmml::Vector3f(float(rand() % 200 - 100), -160.0f, float(rand() % 200 - 100));
+
+	// set position of chest
+	chestPos = vmml::Vector3f(float(rand() % 300 - 150), -198.0f, float(rand() % 300 - 150));
 
 	// load models
 	bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
@@ -58,7 +61,8 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
     bRenderer().getObjects()->loadObjModel_o("Chest.obj", customShader, FLIP_Z);									// the custom shader created above is used
 	bRenderer().getObjects()->loadObjModel_o("plane.obj", 4, SHADER_FROM_FILE);
-	bRenderer().getObjects()->loadObjModel_o("shark.obj", 4, SHADER_FROM_FILE);
+	//bRenderer().getObjects()->loadObjModel_o("shark.obj", 4, SHADER_FROM_FILE);
+	bRenderer().getObjects()->loadObjModel_o("shark.obj", customShader, FLIP_Z);
 	bRenderer().getObjects()->loadObjModel_o("submarine.obj", 4, SHADER_FROM_FILE);
 	bRenderer().getObjects()->loadObjModel_o("rock.obj", 4, SHADER_FROM_FILE);
 	bRenderer().getObjects()->loadObjModel_o("debris.obj", 4, SHADER_FROM_FILE);
@@ -69,11 +73,13 @@ void RenderProject::initFunction()
 	// create text sprites
 	FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
 	if (Input::isTouchDevice())
-    bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(0,0,255), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);
+		bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(0,0,255), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);
 	else
 		bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
 
 	bRenderer().getObjects()->createTextSprite("dead", vmml::Vector3f(0, 0, 255), "SHARK FOOD OMNOMNOM", font);
+
+	bRenderer().getObjects()->createTextSprite("win", vmml::Vector3f(0, 0, 255), "YOU FOUND THE TREASURE GREAT JOB", font);
 
 	// create camera
 	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
@@ -150,6 +156,9 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         // draw
 		if (_dead) {
 			bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("dead"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+		}
+		else if (_win) {
+			bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("win"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
 		}
 		else {
 			bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
@@ -242,7 +251,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     
     /*** Treasure ***/
     // translate and scale
-    modelMatrix = vmml::create_translation(vmml::Vector3f(10*5.0f, -198.0f, 10*5.0f)) * vmml::create_scaling(vmml::Vector3f(0.24f));
+    modelMatrix = vmml::create_translation(chestPos) * vmml::create_scaling(vmml::Vector3f(0.24f));
     // submit to render queue
     // bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
     bRenderer().getModelRenderer()->queueModelInstance("Chest", "treasure", camera, modelMatrix, std::vector<std::string>({ "headLamp" }));    
@@ -371,11 +380,15 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
 			_running = false;
 			_dead = true;
 		}
+		else if (campos.distance(-chestPos) < 20) {
+			_running = false;
+			_win = true;
+		}
 		/*vmml::Vector3f newcampos = bRenderer().getObjects()->getCamera(camera)->getPosition();
 		if ((newcampos.y() < -30.0f) || (newcampos.y() > 23.0f)){
 			bRenderer().getObjects()->getCamera(camera)->setPosition(oldcampos);
 		}*/
-		std::cout << bRenderer().getObjects()->getCamera(camera)->getPosition() << std::endl;
+		//std::cout << bRenderer().getObjects()->getCamera(camera)->getPosition() << std::endl;
 	}	
 }
 

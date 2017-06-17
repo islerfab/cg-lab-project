@@ -1,4 +1,5 @@
 # Exported from 3D Builder
 
 newmtl plane
-Kd 0.800000 0.800000 0.800000
+Kd 0.600000 0.600000 0.600000
+map_Kd monster.jpg

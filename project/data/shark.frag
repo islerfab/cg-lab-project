@@ -35,11 +35,15 @@ uniform vec3 lightDiffuseColor_3;
 uniform vec3 lightSpecularColor_3;
 varying vec3 lightVectorTangentSpace_3;
 varying float intensityBasedOnDist_3;
+uniform sampler2D CustomMap_1;
+uniform sampler2D DiffuseMap;
 varying vec3 surfaceToCameraTangentSpace;
 varying vec3 n;
 varying vec3 surfaceToCamera;
-uniform vec3 ambientColor;
+varying vec2 causticTexCoord;
 uniform vec3 Kd;
+uniform float offset;
+uniform vec3 waterAmbient;
 
 void main() {
 	vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
@@ -54,9 +58,9 @@ void main() {
 	// IF it's in distance (as defined in the light source)
 	if (intensityBasedOnDist_0 > 0.0
 			// AND the surface points towards us
-			&& (intensity = max(dot(surfaceNormal, normalize(surfaceToCamera)), 0.0)) > 0.0) {
+			&& (intensity = max(dot(surfaceNormal, normalize(surfaceToCamera)), 0.0)) > 0.0
 			// AND the point is in the cone of the headlamp
-			//&& dot(normalize(surfaceToCamera), -cameraDirection) > 0.95) {
+			&& dot(normalize(surfaceToCamera), -cameraDirection) > 0.95) {
 		intensity = clamp(intensity, 0.0, 1.0);
 		diffuse += vec4(lightDiffuseColor_0 * (intensity * intensityBasedOnDist_0), 0.0);
 	}
@@ -78,9 +82,14 @@ void main() {
 		intensity = clamp(intensity, 0.0, 1.0);
 		diffuse += vec4(lightDiffuseColor_3 * (intensity * intensityBasedOnDist_3), 0.0);
 	}
-	
-	diffuse = diffuse * vec4(Kd,1.0);
 
-	gl_FragColor = clamp(diffuse + 0.1, 0.0, 1.0);
-	gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
+	vec4 color = diffuse * vec4(Kd, 1.0);
+
+	// Fog effect
+	float fogFactor = pow(0.98, distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));
+	color.rgb = color.rgb * fogFactor + (1.0 - fogFactor) * waterAmbient;
+
+	
+	gl_FragColor = clamp(color, 0.0, 1.0);
+	// gl_FragColor = vec4(waterAmbient, 1.0);
 }
