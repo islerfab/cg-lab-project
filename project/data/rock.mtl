@@ -2,3 +2,4 @@
 
 newmtl rock
 Kd 0.600000 0.600000 0.600000
+map_Kd rock.png
