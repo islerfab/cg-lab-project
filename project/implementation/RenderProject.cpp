@@ -48,6 +48,9 @@ void RenderProject::initFunction()
 		plantLocs[i] = vmml::Vector3f(float(rand() % 400 - 200), -198.0f, float(rand() % 400 - 200));
 	}
 
+	// set position of shark
+	sharkPos = vmml::Vector3f(-20.0f, -170.0f, 10.0f);
+
 	// load models
 	bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
 	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE);
@@ -69,6 +72,8 @@ void RenderProject::initFunction()
     bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(0,0,255), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);
 	else
 		bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
+
+	bRenderer().getObjects()->createTextSprite("dead", vmml::Vector3f(0, 0, 255), "SHARK FOOD OMNOMNOM", font);
 
 	// create camera
 	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
@@ -143,8 +148,12 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
         modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), -0.6f, -0.65f)) * scaling;
         // draw
-        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
-
+		if (_dead) {
+			bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("dead"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+		}
+		else {
+			bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+		}
     }
 
 	//// Camera Movement ////
@@ -207,7 +216,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	bRenderer().getModelRenderer()->queueModelInstance("plane", "plane_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
 	// shark
-	modelMatrix = vmml::create_translation(vmml::Vector3f(-20.0f, -170.0f, 10.0f)) * vmml::create_scaling(vmml::Vector3f(0.4f));
+	modelMatrix = vmml::create_translation(sharkPos) * vmml::create_scaling(vmml::Vector3f(0.4f)) * vmml::create_rotation(float(M_PI), vmml::Vector3f::UNIT_Y);
 	bRenderer().getModelRenderer()->queueModelInstance("shark", "shark_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 
 	// submarine
@@ -355,11 +364,18 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
 		bRenderer().getObjects()->getCamera(camera)->moveCameraForward(cameraForward*_cameraSpeed*deltaTime);
 		bRenderer().getObjects()->getCamera(camera)->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
 		bRenderer().getObjects()->getCamera(camera)->moveCameraSideward(cameraSideward*_cameraSpeed*deltaTime);
-		vmml::Vector3f newcampos = bRenderer().getObjects()->getCamera(camera)->getPosition();
-		/*if ((newcampos.y() < -30.0f) || (newcampos.y() > 23.0f)){
+		
+		// check if near shark
+		vmml::Vector3f campos = bRenderer().getObjects()->getCamera(camera)->getPosition();
+		if (campos.distance(-sharkPos) < 40) {
+			_running = false;
+			_dead = true;
+		}
+		/*vmml::Vector3f newcampos = bRenderer().getObjects()->getCamera(camera)->getPosition();
+		if ((newcampos.y() < -30.0f) || (newcampos.y() > 23.0f)){
 			bRenderer().getObjects()->getCamera(camera)->setPosition(oldcampos);
 		}*/
-		//std::cout << bRenderer().getObjects()->getCamera(camera)->getPosition() << std::endl;
+		std::cout << bRenderer().getObjects()->getCamera(camera)->getPosition() << std::endl;
 	}	
 }
 
