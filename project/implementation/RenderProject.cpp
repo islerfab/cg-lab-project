@@ -95,7 +95,7 @@ void RenderProject::initFunction()
 
     
     // set position of chest
-    chestPos = vmml::Vector3f(float(rand() % 300 - 150), -193.0f, float(rand() % 300 - 150));
+    chestPos = vmml::Vector3f(float(rand() % 300 - 150), -195.0f, float(rand() % 300 - 150));
     
     // load models
     bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
