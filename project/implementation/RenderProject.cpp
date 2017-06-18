@@ -74,6 +74,7 @@ void RenderProject::initFunction()
  
     bRenderer().getObjects()->createTextSprite("tryAgain", vmml::Vector3f(1,1,1), "Double tap to try again", font);
     
+	srand(time(NULL));
     // fill arrays for plants
     for (int i = 0; i < NO_PLANTS; i++) {
         plantSizes[i] = rand() % 71 + 30;
@@ -82,8 +83,10 @@ void RenderProject::initFunction()
     
     // set position of shark
     sharkPos = vmml::Vector3f(float(rand() % 200 - 100), -160.0f, float(rand() % 200 - 100));
-    
-    
+	//std::cout << "shark: " << sharkPos << std::endl;
+
+	// set position of chest
+	chestPos = vmml::Vector3f(float(rand() % 300 - 150), -195.0f, float(rand() % 300 - 150));
     
     if (Input::isTouchDevice()){
         bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);}
@@ -92,10 +95,6 @@ void RenderProject::initFunction()
 
 	// create camera
 	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
-
-    
-    // set position of chest
-    chestPos = vmml::Vector3f(float(rand() % 300 - 150), -195.0f, float(rand() % 300 - 150));
     
     // load models
     bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
@@ -108,6 +107,8 @@ void RenderProject::initFunction()
     bRenderer().getObjects()->loadObjModel_o("submarine.obj", 4, SHADER_FROM_FILE);
     bRenderer().getObjects()->loadObjModel_o("rock.obj", 4, SHADER_FROM_FILE);
     bRenderer().getObjects()->loadObjModel_o("debris.obj", 4, SHADER_FROM_FILE);
+	bRenderer().getObjects()->loadObjModel_o("temple.obj", 4, SHADER_FROM_FILE);
+	bRenderer().getObjects()->loadObjModel_o("pillars.obj", 4, SHADER_FROM_FILE);
     
 
     bRenderer().getObjects()->createTextSprite("dead", vmml::Vector3f(1, 1, 1), "SHARK FOOD OMNOMNOM", font);
@@ -328,7 +329,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance4", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
     // plane
-    modelMatrix = vmml::create_translation(vmml::Vector3f(10.0f, -180.0f, 10.0f)) * vmml::create_rotation(float(45 * M_PI / 180), vmml::Vector3f::UNIT_X) * vmml::create_rotation(float (45 * M_PI / 180), vmml::Vector3f::UNIT_Z) * vmml::create_scaling(vmml::Vector3f(0.22f));
+    modelMatrix = vmml::create_translation(vmml::Vector3f(70.0f, -180.0f, 10.0f)) * vmml::create_rotation(float(45 * M_PI / 180), vmml::Vector3f::UNIT_X) * vmml::create_rotation(float (45 * M_PI / 180), vmml::Vector3f::UNIT_Z) * vmml::create_scaling(vmml::Vector3f(0.22f));
     bRenderer().getModelRenderer()->queueModelInstance("plane", "plane_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
     // shark
@@ -345,18 +346,19 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     
 */
     // submarine
-    modelMatrix = vmml::create_translation(vmml::Vector3f(10.0f, -20.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(0.4f));
+    modelMatrix = vmml::create_translation(vmml::Vector3f(10.0f, -140.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(0.4f));
     bRenderer().getModelRenderer()->queueModelInstance("submarine", "submarine_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
-    // rock
+    /*/ rock
     modelMatrix = vmml::create_translation(vmml::Vector3f(30.0f, -190.0f, 30.0f)) * vmml::create_scaling(vmml::Vector3f(0.2f));
     bRenderer().getModelRenderer()->queueModelInstance("rock", "rock_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
-    
+    /
     // debris
     modelMatrix = vmml::create_translation(vmml::Vector3f(30.0f, -190.0f, -70.0f)) * vmml::create_scaling(vmml::Vector3f(2.2f));
     bRenderer().getModelRenderer()->queueModelInstance("debris", "debris_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
-    
-    
+    */
+
+
     /*** Plants ***/
     for (int i = 0; i < NO_PLANTS; i++) {
         modelMatrix = vmml::create_translation(plantPos[i]) * vmml::create_scaling(plantSizes[i]);
@@ -372,7 +374,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     // bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
     bRenderer().getModelRenderer()->queueModelInstance("Chest", "treasure", camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
     
-    /*** Shells ***/
+    /*** Shells 
     int count = 0;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
@@ -382,8 +384,16 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
             // bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
             bRenderer().getModelRenderer()->queueModelInstance("lambis_truncata_shell", &"shell_instance_" [ count++], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
         }
-    }
+    }*/
+
+	// temple
+	modelMatrix = vmml::create_translation(vmml::Vector3f(-160.0f, -180.0f, 80.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f));
+	bRenderer().getModelRenderer()->queueModelInstance("temple", "temple_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
+	// pillars
+	modelMatrix = vmml::create_translation(vmml::Vector3f(160.0f, -190.0f, -80.0f)) * vmml::create_scaling(vmml::Vector3f(0.5f)) * vmml::create_rotation(float(-M_PI/2), vmml::Vector3f::UNIT_X);
+	bRenderer().getModelRenderer()->queueModelInstance("pillars", "pillars_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
+
     // reset ambient color
     bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
 
@@ -508,7 +518,7 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
             _running = false;
             _dead = true;
         }
-        else if (campos.distance(-chestPos) < 20) {
+        else if (campos.distance(-chestPos) < 30) {
             _running = false;
             _win = true;
         }
