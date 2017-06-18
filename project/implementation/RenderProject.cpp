@@ -28,9 +28,37 @@ bool gameOver = false;
 /* This function is executed when initializing the renderer */
 void RenderProject::initFunction()
 {
-    // get OpenGL and shading language version
-    bRenderer::log("OpenGL Version: ", glGetString(GL_VERSION));
-    bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	// get OpenGL and shading language version
+	bRenderer::log("OpenGL Version: ", glGetString(GL_VERSION));
+	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+	// initialize variables
+	_offset = 0.0f;
+	_randomOffset = 0.0f;
+	_cameraSpeed = 40.0f;
+   
+
+    
+	_running = false; _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
+	_viewMatrixHUD = Camera::lookAt(vmml::Vector3f(0.0f, 0.0f, 0.25f), vmml::Vector3f::ZERO, vmml::Vector3f::UP);
+
+	// set shader versions (optional)
+	bRenderer().getObjects()->setShaderVersionDesktop("#version 120");
+	bRenderer().getObjects()->setShaderVersionES("#version 100");
+
+	// load materials and shaders before loading the model
+	ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", { 2, true, true, true, true, true, true, true, true, true, false, false, false });	// automatically generates a shader with a maximum of 2 lights
+		// ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile_o("flame", 0, AMBIENT_LIGHTING);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
+		// MaterialPtr flameMaterial = bRenderer().getObjects()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
+
+	// create additional properties for a model
+	PropertiesPtr causticProperties = bRenderer().getObjects()->createProperties("causticProperties");
+
+	// load models
+	bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE);				
+	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
+	bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
     
     // initialize variables
     _offset = 0.0f;
@@ -38,18 +66,30 @@ void RenderProject::initFunction()
     _cameraSpeed = 40.0f;
     _running = false; _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
     _viewMatrixHUD = Camera::lookAt(vmml::Vector3f(0.0f, 0.0f, 0.25f), vmml::Vector3f::ZERO, vmml::Vector3f::UP);
+    bRenderer().getObjects()->loadObjModel_o("Chest.obj", customShader, FLIP_Z);
+    // the custom shader created above is used
+   // bRenderer().getObjects()->loadObjModel_o("object1.obj", customShader, FLIP_Z);
+
+
+	// create sprites
+	//bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");							// create a sprite displaying the title as a texture
+
+	// create text sprites
+	FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
     
     // set shader versions (optional)
     bRenderer().getObjects()->setShaderVersionDesktop("#version 120");
     bRenderer().getObjects()->setShaderVersionES("#version 100");
+    bRenderer().getObjects()->createTextSprite("gamename", vmml::Vector3f(1,1,1), "TREASURE SEEKER", font);
     
     // load materials and shaders before loading the model
-    ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", { 2, true, true, true, true, true, true, true, true, true, false, false, false });	// automatically generates a shader with a maximum of 2 lights
+	// automatically generates a shader with a maximum of 2 lights
     // ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile_o("flame", 0, AMBIENT_LIGHTING);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
     // MaterialPtr flameMaterial = bRenderer().getObjects()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
+    bRenderer().getObjects()->createTextSprite("gameOver", vmml::Vector3f(1,1,1), "GAME OVER", font);
     
-    // create additional properties for a model
-    PropertiesPtr causticProperties = bRenderer().getObjects()->createProperties("causticProperties");
+ 
+    bRenderer().getObjects()->createTextSprite("tryAgain", vmml::Vector3f(1,1,1), "Double tap to try again", font);
     
     // fill arrays for plants
     for (int i = 0; i < NO_PLANTS; i++) {
@@ -59,6 +99,17 @@ void RenderProject::initFunction()
     
     // set position of shark
     sharkPos = vmml::Vector3f(float(rand() % 200 - 100), -160.0f, float(rand() % 200 - 100));
+    
+    
+    
+    if (Input::isTouchDevice()){
+        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);}
+    else{
+        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);}
+
+	// create camera
+	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
+
     
     // set position of chest
     chestPos = vmml::Vector3f(float(rand() % 300 - 150), -198.0f, float(rand() % 300 - 150));
@@ -76,19 +127,10 @@ void RenderProject::initFunction()
     bRenderer().getObjects()->loadObjModel_o("rock.obj", 4, SHADER_FROM_FILE);
     bRenderer().getObjects()->loadObjModel_o("debris.obj", 4, SHADER_FROM_FILE);
     
-    // create sprites
-    bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");							// create a sprite displaying the title as a texture
+
+    bRenderer().getObjects()->createTextSprite("dead", vmml::Vector3f(1, 1, 1), "SHARK FOOD OMNOMNOM", font);
     
-    // create text sprites
-    FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
-    if (Input::isTouchDevice())
-        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(0,0,255), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);
-    else
-        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Press space to start", font);
-    
-    bRenderer().getObjects()->createTextSprite("dead", vmml::Vector3f(0, 0, 255), "SHARK FOOD OMNOMNOM", font);
-    
-    bRenderer().getObjects()->createTextSprite("win", vmml::Vector3f(0, 0, 255), "YOU FOUND THE TREASURE GREAT JOB", font);
+    bRenderer().getObjects()->createTextSprite("win", vmml::Vector3f(1, 1, 1), "YOU FOUND THE TREASURE GREAT JOB", font);
     
     // create camera
     bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));
@@ -107,6 +149,7 @@ void RenderProject::initFunction()
     
     // Update render queue
     updateRenderQueue("camera", 0.0f);
+
 }
 
 /* Draw your scene here */
@@ -156,7 +199,7 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
         modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
         // draw
-        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("bTitle"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false, false);
+   
         
         /*** Instructions ***/
         titleScale = 0.08f;
@@ -169,21 +212,91 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         else if (_win) {
             bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("win"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
         }
-        else {
+        
+        else if(!gameOver){
+            
+            /*** Instructions ***/
+            titleScale = 0.08f;
+            scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+            modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), -0.6f, -0.65f)) * scaling;
+            // draw
             bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("instructions"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+            
+            titleScale = 0.18f;
+            scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+            modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.6f, -0.65f)) * scaling;
+            bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gamename"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+            
+        }else if(gameOver){
+            //Game Over screen
+            titleScale = 0.18f;
+            scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+            modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.6f, -0.65f)) * scaling;
+            bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameOver"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+            
+            /*** Instructions to Try again ***/
+            titleScale = 0.08f;
+            scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+            modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), -0.6f, -0.65f)) * scaling;
+            // draw
+            bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("tryAgain"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+            
         }
+        
+        
     }
+    
+
+	if (_running) {
+		if (deltaTime > 0.0f) {
+			_offset += 5 * deltaTime;
+			_randomOffset += (randomNumber(10.0f, 20.0f)) * deltaTime;
+		}
+        
+        
+    
+        FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
+        //game state
+        bRenderer().getObjects()->createTextSprite("gameState", vmml::Vector3f(1,1,1), "air: " + std::to_string(100) + "%"  , font);
+        clock_t start_time = clock();
+        int airLeft = 100;
+    
+        //the higher the more time you have to find the treasure
+        if((int)(start_time/10000) % 4 > 2)
+        {
+            airLeft = air-counter;
+            counter++;
+        }
+        
+        //game state
+        bRenderer().getObjects()->createTextSprite("gameState"+ std::to_string(counter), vmml::Vector3f(1,1,1), "air: " + std::to_string(airLeft) + "%"  , font);
+        
+        vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
+        
+        GLfloat titleScale = 0.1f;
+        vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
+        
+        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.7f, -0.65f)) * scaling;
+        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameState"+std::to_string(counter)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+        
+        if(airLeft == 0){
+            
+            /// GAME OVER ///
+          
+            //reset counter
+            counter = 0;
+            gameOver = true;
+            _running = !_running;
+
+
+        }
+
+	}
     
     //// Camera Movement ////
     updateCamera("camera", deltaTime);
-    
     // Change the deltas for waves
-    if (_running) {
-        if (deltaTime > 0.0f) {
-            _offset += 5 * deltaTime;
-            _randomOffset += (randomNumber(10.0f, 20.0f)) * deltaTime;
-        }
-    }
     
     //// Head Lamp ////
     // set the light to be at the camera position
@@ -196,6 +309,8 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
     if (bRenderer().getInput()->getKeyState(bRenderer::KEY_ESCAPE) == bRenderer::INPUT_PRESS)
         bRenderer().terminateRenderer();
 }
+
+
 
 /* This function is executed when terminating the renderer */
 void RenderProject::terminateFunction()
@@ -210,6 +325,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     bRenderer().getObjects()->getProperties("causticProperties")->setScalar("offset", _offset);		// pass offset for wave effect
     bRenderer().getObjects()->getProperties("causticProperties")->setVector("waterAmbient", vmml::Vector3f(0.1, 0.1f, 0.15f));		// pass ambient color (could be changing dynamically)
     
+
     // Cube
     vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 0.0f)) * vmml::create_scaling(vmml::Vector3f(2.0f));
     // submit to render queue
@@ -237,6 +353,15 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     modelMatrix = vmml::create_translation(sharkPos) * vmml::create_scaling(vmml::Vector3f(0.4f)) * vmml::create_rotation(float(M_PI), vmml::Vector3f::UNIT_Y);
     bRenderer().getModelRenderer()->queueModelInstance("shark", "shark_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
+    /*** bubbles ***//*
+    int bubbles = 0;
+    for (float i = 0; i < 3; i++) {
+        for (float j = 0; j < 3; j++) {
+            bRenderer().getModelRenderer()->queueModelInstance("object1", &"bubble_instance" [ bubbles++] , camera, modelMatrix * vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 00.0f)) *vmml::create_translation(vmml::Vector3f(i * -400.0f, 10.0f, j* -1000.0f)) * vmml::create_scaling(vmml::Vector3f(2.0f)), std::vector<std::string>({ "headLamp" }));
+        }
+    }
+    
+*/
     // submarine
     modelMatrix = vmml::create_translation(vmml::Vector3f(10.0f, -20.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(0.4f));
     bRenderer().getModelRenderer()->queueModelInstance("submarine", "submarine_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
@@ -279,7 +404,8 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     
     // reset ambient color
     bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
-    
+
+
 }
 
 /* Camera movement */
@@ -301,6 +427,8 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
         
         // pause using double tap
         if (bRenderer().getInput()->doubleTapRecognized()){
+            gameOver = false;
+            _dead = false;
             _running = !_running;
         }
         
@@ -337,6 +465,7 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
         {
             _lastStateSpaceKey = currentStateSpaceKey;
             if (currentStateSpaceKey == bRenderer::INPUT_PRESS){
+                gameOver = false;
                 _running = !_running;
                 bRenderer().getInput()->setCursorEnabled(!_running);
             }
@@ -393,12 +522,7 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
             _running = false;
             _win = true;
         }
-        /*vmml::Vector3f newcampos = bRenderer().getObjects()->getCamera(camera)->getPosition();
-         if ((newcampos.y() < -30.0f) || (newcampos.y() > 23.0f)){
-         bRenderer().getObjects()->getCamera(camera)->setPosition(oldcampos);
-         }*/
-        //std::cout << bRenderer().getObjects()->getCamera(camera)->getPosition() << std::endl;
-    }	
+         }
 }
 
 

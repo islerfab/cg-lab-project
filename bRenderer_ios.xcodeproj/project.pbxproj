@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0749E66A1EF69B1D001E1AD9 /* bubble.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 0749E6681EF69B1D001E1AD9 /* bubble.mtl */; };
+		0749E66B1EF69B1D001E1AD9 /* bubble.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0749E6691EF69B1D001E1AD9 /* bubble.obj */; };
 		078F8F6D1EF578E900A87695 /* AG01_1_old.obj in Resources */ = {isa = PBXBuildFile; fileRef = 078F8F0A1EF578E900A87695 /* AG01_1_old.obj */; };
 		078F8F6E1EF578E900A87695 /* AG01_1.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 078F8F0B1EF578E900A87695 /* AG01_1.mtl */; };
 		078F8F6F1EF578E900A87695 /* AG01_1.obj in Resources */ = {isa = PBXBuildFile; fileRef = 078F8F0C1EF578E900A87695 /* AG01_1.obj */; };
@@ -205,6 +207,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0749E6681EF69B1D001E1AD9 /* bubble.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bubble.mtl; sourceTree = "<group>"; };
+		0749E6691EF69B1D001E1AD9 /* bubble.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bubble.obj; sourceTree = "<group>"; };
 		078F8F0A1EF578E900A87695 /* AG01_1_old.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AG01_1_old.obj; sourceTree = "<group>"; };
 		078F8F0B1EF578E900A87695 /* AG01_1.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AG01_1.mtl; sourceTree = "<group>"; };
 		078F8F0C1EF578E900A87695 /* AG01_1.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AG01_1.obj; sourceTree = "<group>"; };
@@ -519,6 +523,8 @@
 		B47949841BA6742B00B5E9DC /* data */ = {
 			isa = PBXGroup;
 			children = (
+				0749E6681EF69B1D001E1AD9 /* bubble.mtl */,
+				0749E6691EF69B1D001E1AD9 /* bubble.obj */,
 				078F8F0A1EF578E900A87695 /* AG01_1_old.obj */,
 				078F8F0B1EF578E900A87695 /* AG01_1.mtl */,
 				078F8F0C1EF578E900A87695 /* AG01_1.obj */,
@@ -953,6 +959,7 @@
 				078F8F731EF578EA00A87695 /* basicTitle_light.png in Resources */,
 				078F8F701EF578E900A87695 /* AG01brn1.tif in Resources */,
 				078F8F901EF578EA00A87695 /* crystal.mtl in Resources */,
+				0749E66A1EF69B1D001E1AD9 /* bubble.mtl in Resources */,
 				078F8F781EF578EA00A87695 /* bump_texture_shell.png in Resources */,
 				078F8FC11EF578EA00A87695 /* shark.mtl in Resources */,
 				078F8F8E1EF578EA00A87695 /* crystal_n.png in Resources */,
@@ -962,6 +969,7 @@
 				078F8F9B1EF578EA00A87695 /* dune.vert in Resources */,
 				078F8FA81EF578EA00A87695 /* jellyfish.mtl in Resources */,
 				078F8F881EF578EA00A87695 /* config.json in Resources */,
+				0749E66B1EF69B1D001E1AD9 /* bubble.obj in Resources */,
 				078F8FB41EF578EA00A87695 /* plane.vert in Resources */,
 				078F8F761EF578EA00A87695 /* border.frag in Resources */,
 				078F8FCF1EF578EA00A87695 /* torchSurface_Color.png in Resources */,
