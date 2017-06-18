@@ -18,6 +18,8 @@ public:
 	/* This function is executed when initializing the renderer */
 	void initFunction();
 
+    void resetGame();
+    
 	/* Draw your scene here */
 	void loopFunction(const double &deltaTime, const double &elapsedTime);
 
@@ -66,6 +68,9 @@ private:
 
 	bool _dead = false;
 	bool _win = false;
+    bool _gameOver = false;
+    int _air = 100;
+    int _airCounter = 0;
 
 	/* objects */
 	vmml::Vector3f sharkPos;

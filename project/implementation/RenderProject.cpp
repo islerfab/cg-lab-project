@@ -20,9 +20,6 @@ void RenderProject::init()
     bRenderer().runRenderer();
 }
 
-int counter = 0;
-int air = 100;
-bool gameOver = false;
 
 
 /* This function is executed when initializing the renderer */
@@ -37,8 +34,7 @@ void RenderProject::initFunction()
 	_randomOffset = 0.0f;
 	_cameraSpeed = 40.0f;
    
-
-    
+   
 	_running = false; _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
 	_viewMatrixHUD = Camera::lookAt(vmml::Vector3f(0.0f, 0.0f, 0.25f), vmml::Vector3f::ZERO, vmml::Vector3f::UP);
 
@@ -47,9 +43,7 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->setShaderVersionES("#version 100");
 
 	// load materials and shaders before loading the model
-	ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", { 2, true, true, true, true, true, true, true, true, true, false, false, false });	// automatically generates a shader with a maximum of 2 lights
-		// ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile_o("flame", 0, AMBIENT_LIGHTING);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
-		// MaterialPtr flameMaterial = bRenderer().getObjects()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
+	ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", { 2, true, true, true, true, true, true, true, true, true, false, false, false });
 
 	// create additional properties for a model
 	PropertiesPtr causticProperties = bRenderer().getObjects()->createProperties("causticProperties");
@@ -60,19 +54,11 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
 	bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
     
-    // initialize variables
-    _offset = 0.0f;
-    _randomOffset = 0.0f;
-    _cameraSpeed = 40.0f;
-    _running = false; _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
-    _viewMatrixHUD = Camera::lookAt(vmml::Vector3f(0.0f, 0.0f, 0.25f), vmml::Vector3f::ZERO, vmml::Vector3f::UP);
+
     bRenderer().getObjects()->loadObjModel_o("Chest.obj", customShader, FLIP_Z);
     // the custom shader created above is used
    // bRenderer().getObjects()->loadObjModel_o("object1.obj", customShader, FLIP_Z);
 
-
-	// create sprites
-	//bRenderer().getObjects()->createSprite("bTitle", "basicTitle_light.png");							// create a sprite displaying the title as a texture
 
 	// create text sprites
 	FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
@@ -82,10 +68,7 @@ void RenderProject::initFunction()
     bRenderer().getObjects()->setShaderVersionES("#version 100");
     bRenderer().getObjects()->createTextSprite("gamename", vmml::Vector3f(1,1,1), "TREASURE SEEKER", font);
     
-    // load materials and shaders before loading the model
-	// automatically generates a shader with a maximum of 2 lights
-    // ShaderPtr flameShader = bRenderer().getObjects()->loadShaderFile_o("flame", 0, AMBIENT_LIGHTING);				// load shader from file without lighting, the number of lights won't ever change during rendering (no variable number of lights)
-    // MaterialPtr flameMaterial = bRenderer().getObjects()->loadObjMaterial("flame.mtl", "flame", flameShader);				// load material from file using the shader created above
+
     bRenderer().getObjects()->createTextSprite("gameOver", vmml::Vector3f(1,1,1), "GAME OVER", font);
     
  
@@ -112,7 +95,7 @@ void RenderProject::initFunction()
 
     
     // set position of chest
-    chestPos = vmml::Vector3f(float(rand() % 300 - 150), -198.0f, float(rand() % 300 - 150));
+    chestPos = vmml::Vector3f(float(rand() % 300 - 150), -193.0f, float(rand() % 300 - 150));
     
     // load models
     bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
@@ -121,7 +104,6 @@ void RenderProject::initFunction()
     bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
     bRenderer().getObjects()->loadObjModel_o("Chest.obj", customShader, FLIP_Z);									// the custom shader created above is used
     bRenderer().getObjects()->loadObjModel_o("plane.obj", 4, SHADER_FROM_FILE);
-    //bRenderer().getObjects()->loadObjModel_o("shark.obj", 4, SHADER_FROM_FILE);
     bRenderer().getObjects()->loadObjModel_o("shark.obj", customShader, FLIP_Z);
     bRenderer().getObjects()->loadObjModel_o("submarine.obj", 4, SHADER_FROM_FILE);
     bRenderer().getObjects()->loadObjModel_o("rock.obj", 4, SHADER_FROM_FILE);
@@ -213,7 +195,7 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
             bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("win"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
         }
         
-        else if(!gameOver){
+        else if(!_gameOver){
             
             /*** Instructions ***/
             titleScale = 0.08f;
@@ -227,7 +209,7 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
             modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.6f, -0.65f)) * scaling;
             bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gamename"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
             
-        }else if(gameOver){
+        }else if(_gameOver){
             //Game Over screen
             titleScale = 0.18f;
             scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
@@ -262,14 +244,14 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         int airLeft = 100;
     
         //the higher the more time you have to find the treasure
-        if((int)(start_time/10000) % 4 > 2)
+        if((int)(start_time/10000) % 6 > 4)
         {
-            airLeft = air-counter;
-            counter++;
+            airLeft = _air-_airCounter;
+            _airCounter++;
         }
         
         //game state
-        bRenderer().getObjects()->createTextSprite("gameState"+ std::to_string(counter), vmml::Vector3f(1,1,1), "air: " + std::to_string(airLeft) + "%"  , font);
+        bRenderer().getObjects()->createTextSprite("gameState"+ std::to_string(_airCounter), vmml::Vector3f(1,1,1), "air: " + std::to_string(airLeft) + "%"  , font);
         
         vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
         
@@ -278,15 +260,15 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
         
         modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.7f, -0.65f)) * scaling;
-        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameState"+std::to_string(counter)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameState"+std::to_string(_airCounter)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
         
         if(airLeft == 0){
             
             /// GAME OVER ///
           
             //reset counter
-            counter = 0;
-            gameOver = true;
+            _airCounter = 0;
+            _gameOver = true;
             _running = !_running;
 
 
@@ -427,10 +409,14 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
         
         // pause using double tap
         if (bRenderer().getInput()->doubleTapRecognized()){
-            gameOver = false;
-            _dead = false;
             _running = !_running;
+            
+            if(_dead || _win || _gameOver){
+                resetGame();
+            
+            }
         }
+        
         
         if (_running){
             // control using touch
@@ -465,9 +451,13 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
         {
             _lastStateSpaceKey = currentStateSpaceKey;
             if (currentStateSpaceKey == bRenderer::INPUT_PRESS){
-                gameOver = false;
                 _running = !_running;
                 bRenderer().getInput()->setCursorEnabled(!_running);
+                
+                if(_dead || _win || _gameOver){
+                    resetGame();
+                    
+                }
             }
         }
         
@@ -545,7 +535,15 @@ void RenderProject::appWillResignActive()
     }
 }
 
-
+void RenderProject::resetGame(){
+    bRenderer().getObjects()->getCamera("camera")->resetCamera();
+    _dead = false;
+    _win = false;
+    _gameOver = false;
+    _airCounter = 0;
+    init();
+    initFunction();
+}
 
 /* For iOS only: Handle app coming back from background */
 void RenderProject::appDidBecomeActive()
