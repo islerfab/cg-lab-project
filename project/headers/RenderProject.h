@@ -79,7 +79,7 @@ private:
 	/* plants */
 	static const int NO_PLANTS = 10;
 	float plantSizes[NO_PLANTS];
-	vmml::Vector3f plantLocs[NO_PLANTS];
+	vmml::Vector3f plantPos[NO_PLANTS];
 };
 
 #endif /* defined(PROJECT_MAIN_H) */

@@ -77,7 +77,7 @@ void RenderProject::initFunction()
     // fill arrays for plants
     for (int i = 0; i < NO_PLANTS; i++) {
         plantSizes[i] = rand() % 71 + 30;
-        plantLocs[i] = vmml::Vector3f(float(rand() % 400 - 200), -198.0f, float(rand() % 400 - 200));
+        plantPos[i] = vmml::Vector3f(float(rand() % 400 - 200), -198.0f, float(rand() % 400 - 200));
     }
     
     // set position of shark
@@ -359,7 +359,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     
     /*** Plants ***/
     for (int i = 0; i < NO_PLANTS; i++) {
-        modelMatrix = vmml::create_translation(plantLocs[i]) * vmml::create_scaling(plantSizes[i]);
+        modelMatrix = vmml::create_translation(plantPos[i]) * vmml::create_scaling(plantSizes[i]);
         // submit to render queue
         // bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
         bRenderer().getModelRenderer()->queueModelInstance("AG01_1", &"plant_" [i], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
