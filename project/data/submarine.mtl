@@ -2,3 +2,5 @@
 
 newmtl submarine
 Kd 0.800000 0.800000 0.800000
+
+map_Kd submarine.jpg
