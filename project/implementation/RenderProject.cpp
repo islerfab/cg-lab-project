@@ -1,5 +1,9 @@
 #include "RenderProject.h"
 
+
+#include <stdio.h>
+#include <time.h>
+
 /* Initialize the Project */
 void RenderProject::init()
 {
@@ -15,6 +19,11 @@ void RenderProject::init()
     // start main loop
     bRenderer().runRenderer();
 }
+
+int counter = 0;
+int air = 100;
+bool gameOver = false;
+
 
 /* This function is executed when initializing the renderer */
 void RenderProject::initFunction()
@@ -392,6 +401,7 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
     }	
 }
 
+
 /* For iOS only: Handle device rotation */
 void RenderProject::deviceRotated()
 {
@@ -410,6 +420,8 @@ void RenderProject::appWillResignActive()
         bRenderer().stopRenderer();
     }
 }
+
+
 
 /* For iOS only: Handle app coming back from background */
 void RenderProject::appDidBecomeActive()
