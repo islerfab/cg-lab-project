@@ -1,5 +1,0 @@
-newmtl almondKernels:shellSG
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-map_Kd hazelnut_diff.tga
-map_Bump hazelnut_normal.png
