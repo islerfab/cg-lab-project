@@ -71,7 +71,7 @@ void RenderProject::initFunction()
     
     // fill arrays for bottles
     for (int i = 0; i < NO_BOTTLES; i++) {
-        bottleSize[i] = 0.5f;
+        bottleSize[i] = 0.7f;
         bottleDraw[i] = true;
         bottlePos[i] = vmml::Vector3f(float(rand() % 400 - 200), -198.0f, float(rand() % 400 - 200));
     }
@@ -85,9 +85,9 @@ void RenderProject::initFunction()
 	chestPos = vmml::Vector3f(float(rand() % 300 - 150), -193.0f, float(rand() % 300 - 150));
     
     if (Input::isTouchDevice()){
-        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);}
+        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nFind some extra air on your way - but be aware of the shark! \n \nDouble tap to start", font);}
     else{
-        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);}
+        bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1.f, 1.f, 1.f), "Try to find the treasure before your air runs out \n \nFind some extra air on your way - but be aware of the shark! \n \nPress space to start", font);}
 
 	// create camera
 	bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(0.f, -M_PI_F / 2, 0.f));

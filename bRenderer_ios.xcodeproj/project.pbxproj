@@ -77,8 +77,6 @@
 		0749E9371EF8567F001E1AD9 /* texture_shell.png in Resources */ = {isa = PBXBuildFile; fileRef = 0749E8CF1EF8567F001E1AD9 /* texture_shell.png */; };
 		0749E93A1EF85DDD001E1AD9 /* garrafa.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 0749E9381EF85DDD001E1AD9 /* garrafa.mtl */; };
 		0749E93B1EF85DDD001E1AD9 /* garrafa.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0749E9391EF85DDD001E1AD9 /* garrafa.obj */; };
-		078808331EF870D300FD96CA /* garaffa.frag in Resources */ = {isa = PBXBuildFile; fileRef = 078808311EF870D300FD96CA /* garaffa.frag */; };
-		078808341EF870D300FD96CA /* garrafa.vert in Resources */ = {isa = PBXBuildFile; fileRef = 078808321EF870D300FD96CA /* garrafa.vert */; };
 		0788083F1EF8746400FD96CA /* bottle.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 0788083D1EF8746400FD96CA /* bottle.mtl */; };
 		078808401EF8746400FD96CA /* bottle.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0788083E1EF8746400FD96CA /* bottle.obj */; };
 		B44186971BA331E300604D7F /* RenderProject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B44186961BA331E300604D7F /* RenderProject.cpp */; };
@@ -250,8 +248,6 @@
 		0749E8CF1EF8567F001E1AD9 /* texture_shell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture_shell.png; sourceTree = "<group>"; };
 		0749E9381EF85DDD001E1AD9 /* garrafa.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = garrafa.mtl; sourceTree = "<group>"; };
 		0749E9391EF85DDD001E1AD9 /* garrafa.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = garrafa.obj; sourceTree = "<group>"; };
-		078808311EF870D300FD96CA /* garaffa.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = garaffa.frag; sourceTree = "<group>"; };
-		078808321EF870D300FD96CA /* garrafa.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = garrafa.vert; sourceTree = "<group>"; };
 		0788083D1EF8746400FD96CA /* bottle.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bottle.mtl; sourceTree = "<group>"; };
 		0788083E1EF8746400FD96CA /* bottle.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bottle.obj; sourceTree = "<group>"; };
 		B44186941BA331E300604D7F /* RenderProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderProject.h; sourceTree = "<group>"; };
@@ -469,8 +465,6 @@
 		B47949841BA6742B00B5E9DC /* data */ = {
 			isa = PBXGroup;
 			children = (
-				078808311EF870D300FD96CA /* garaffa.frag */,
-				078808321EF870D300FD96CA /* garrafa.vert */,
 				0749E8681EF8567F001E1AD9 /* AG01_1.mtl */,
 				0749E8691EF8567F001E1AD9 /* AG01_1.obj */,
 				0749E86A1EF8567F001E1AD9 /* AG01brn1.tif */,
@@ -913,7 +907,6 @@
 				0749E8EB1EF8567F001E1AD9 /* debris.vert in Resources */,
 				0749E8F31EF8567F001E1AD9 /* lambis_truncata_shell.obj in Resources */,
 				0749E8D81EF8567F001E1AD9 /* border.frag in Resources */,
-				078808341EF870D300FD96CA /* garrafa.vert in Resources */,
 				0749E8EA1EF8567F001E1AD9 /* debris.obj in Resources */,
 				0749E8FF1EF8567F001E1AD9 /* ring.mtl in Resources */,
 				078808401EF8746400FD96CA /* bottle.obj in Resources */,
@@ -921,7 +914,6 @@
 				0749E9371EF8567F001E1AD9 /* texture_shell.png in Resources */,
 				0749E8ED1EF8567F001E1AD9 /* dune.mtl in Resources */,
 				0749E8F91EF8567F001E1AD9 /* pillars.obj in Resources */,
-				078808331EF870D300FD96CA /* garaffa.frag in Resources */,
 				B4CB8CD01B72E43300FE041B /* Project-Info.plist in Resources */,
 				0749E8E71EF8567F001E1AD9 /* cube.obj in Resources */,
 				0749E8D51EF8567F001E1AD9 /* basicTitle_light.png in Resources */,
