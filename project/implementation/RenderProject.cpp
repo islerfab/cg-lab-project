@@ -69,12 +69,20 @@ void RenderProject::initFunction()
         plantPos[i] = vmml::Vector3f(float(rand() % 400 - 200), -198.0f, float(rand() % 400 - 200));
     }
     
+    // fill arrays for bottles
+    for (int i = 0; i < NO_BOTTLES; i++) {
+        bottleSize[i] = 0.5f;
+        bottleDraw[i] = true;
+        bottlePos[i] = vmml::Vector3f(float(rand() % 400 - 200), -198.0f, float(rand() % 400 - 200));
+    }
+    
+    
     // set position of shark
     sharkPos = vmml::Vector3f(float(rand() % 200 - 100), -160.0f, float(rand() % 200 - 100));
 	//std::cout << "shark: " << sharkPos << std::endl;
 
 	// set position of chest
-	chestPos = vmml::Vector3f(float(rand() % 300 - 150), -195.0f, float(rand() % 300 - 150));
+	chestPos = vmml::Vector3f(float(rand() % 300 - 150), -193.0f, float(rand() % 300 - 150));
     
     if (Input::isTouchDevice()){
         bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nDouble tap to start", font);}
@@ -97,6 +105,8 @@ void RenderProject::initFunction()
     bRenderer().getObjects()->loadObjModel_o("debris.obj", 4, SHADER_FROM_FILE);
 	bRenderer().getObjects()->loadObjModel_o("temple.obj", 4, SHADER_FROM_FILE);
 	bRenderer().getObjects()->loadObjModel_o("pillars.obj", 4, SHADER_FROM_FILE);
+    bRenderer().getObjects()->loadObjModel_o("bottle.obj", customShader, FLIP_Z);
+
     
 
     bRenderer().getObjects()->createTextSprite("dead", vmml::Vector3f(1, 1, 1), "SHARK FOOD OMNOMNOM", font);
@@ -324,15 +334,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     modelMatrix = vmml::create_translation(sharkPos) * vmml::create_scaling(vmml::Vector3f(0.4f)) * vmml::create_rotation(float(M_PI), vmml::Vector3f::UNIT_Y);
     bRenderer().getModelRenderer()->queueModelInstance("shark", "shark_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
-    /*** bubbles ***//*
-    int bubbles = 0;
-    for (float i = 0; i < 3; i++) {
-        for (float j = 0; j < 3; j++) {
-            bRenderer().getModelRenderer()->queueModelInstance("object1", &"bubble_instance" [ bubbles++] , camera, modelMatrix * vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 00.0f)) *vmml::create_translation(vmml::Vector3f(i * -400.0f, 10.0f, j* -1000.0f)) * vmml::create_scaling(vmml::Vector3f(2.0f)), std::vector<std::string>({ "headLamp" }));
-        }
-    }
-    
-*/
+
     // submarine
     modelMatrix = vmml::create_translation(vmml::Vector3f(10.0f, -140.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(0.4f));
     bRenderer().getModelRenderer()->queueModelInstance("submarine", "submarine_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
@@ -354,6 +356,17 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
         // bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
         bRenderer().getModelRenderer()->queueModelInstance("AG01_1", &"plant_" [i], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
     }
+    
+    /*** AIR BOTTLES ***/
+    for (int i = 0; i < NO_BOTTLES; i++) {
+        modelMatrix = vmml::create_translation(bottlePos[i]) * vmml::create_scaling(bottleSize[i]);
+        // submit to render queue
+        if(bottleDraw[i] == true){
+             bRenderer().getModelRenderer()->queueModelInstance("bottle", &"bottle_instance" [i], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
+        }
+       
+    }
+    
     
     /*** Treasure ***/
     // translate and scale
@@ -508,7 +521,22 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
             _running = false;
             _win = true;
         }
-         }
+        else{
+            for(int i = 0; i< NO_BOTTLES; i++){
+                if (campos.distance(-(bottlePos[i])) < 30 && bottleDraw[i] == true){
+                    if(_airCounter > 0){
+                        _airCounter = _airCounter-20;
+                        if(_airCounter < 0){
+                            _airCounter = 0;
+                        }
+                    }
+                    bottleDraw[i] = false;
+                }
+                
+            }
+
+        }
+    }
 }
 
 

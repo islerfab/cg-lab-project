@@ -80,6 +80,13 @@ private:
 	static const int NO_PLANTS = 10;
 	float plantSizes[NO_PLANTS];
 	vmml::Vector3f plantPos[NO_PLANTS];
+    
+    /* bottles */
+    static const int NO_BOTTLES = 5;
+    float bottleSize[NO_BOTTLES];
+    bool bottleDraw[NO_BOTTLES];
+    vmml::Vector3f bottlePos[NO_BOTTLES];
+    
 };
 
 #endif /* defined(PROJECT_MAIN_H) */
