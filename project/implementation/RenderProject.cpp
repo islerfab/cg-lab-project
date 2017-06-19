@@ -105,7 +105,7 @@ void RenderProject::initFunction()
     bRenderer().getObjects()->loadObjModel_o("debris.obj", 4, SHADER_FROM_FILE);
 	bRenderer().getObjects()->loadObjModel_o("temple.obj", 4, SHADER_FROM_FILE);
 	bRenderer().getObjects()->loadObjModel_o("pillars.obj", 4, SHADER_FROM_FILE);
-    bRenderer().getObjects()->loadObjModel_o("garrafa.obj", customShader, FLIP_Z);
+    bRenderer().getObjects()->loadObjModel_o("bottle.obj", customShader, FLIP_Z);
 
     
 
@@ -362,7 +362,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
         modelMatrix = vmml::create_translation(bottlePos[i]) * vmml::create_scaling(bottleSize[i]);
         // submit to render queue
         if(bottleDraw[i] == true){
-             bRenderer().getModelRenderer()->queueModelInstance("garrafa", &"garrafa_instance" [i], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
+             bRenderer().getModelRenderer()->queueModelInstance("bottle", &"bottle_instance" [i], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
         }
        
     }
