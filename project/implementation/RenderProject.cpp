@@ -14,7 +14,6 @@ void RenderProject::init()
         bRenderer().initRenderer(true);										// full screen on iOS
     else
         bRenderer().initRenderer(1920, 1080, false, "The Dive - Demo");		// windowed mode on desktop
-    //bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// full screen using full width and height of the screen
     
     // start main loop
     bRenderer().runRenderer();
@@ -48,17 +47,6 @@ void RenderProject::initFunction()
 	// create additional properties for a model
 	PropertiesPtr causticProperties = bRenderer().getObjects()->createProperties("causticProperties");
 
-	// load models
-	bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
-	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE);				
-	bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
-	bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
-    
-
-    bRenderer().getObjects()->loadObjModel_o("Chest.obj", customShader, FLIP_Z);
-    // the custom shader created above is used
-   // bRenderer().getObjects()->loadObjModel_o("object1.obj", customShader, FLIP_Z);
-
 
 	// create text sprites
 	FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
@@ -74,7 +62,7 @@ void RenderProject::initFunction()
  
     bRenderer().getObjects()->createTextSprite("tryAgain", vmml::Vector3f(1,1,1), "Double tap to try again", font);
     
-	srand(time(NULL));
+	srand((float)time(NULL));
     // fill arrays for plants
     for (int i = 0; i < NO_PLANTS; i++) {
         plantSizes[i] = rand() % 71 + 30;
@@ -411,8 +399,6 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
     double cameraForward = 0.0;
     double cameraSideward = 0.0;
     
-    //vmml::Vector3f oldcampos = bRenderer().getObjects()->getCamera(camera)->getPosition();
-    //std::cout << oldcampos << std::endl;
     
     /* iOS: control movement using touch screen */
     if (Input::isTouchDevice()){
