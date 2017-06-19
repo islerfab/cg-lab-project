@@ -77,12 +77,12 @@ private:
 	vmml::Vector3f chestPos;
 
 	/* plants */
-	static const int NO_PLANTS = 10;
+	static const int NO_PLANTS = 20;
 	float plantSizes[NO_PLANTS];
 	vmml::Vector3f plantPos[NO_PLANTS];
     
     /* bottles */
-    static const int NO_BOTTLES = 5;
+    static const int NO_BOTTLES = 7;
     float bottleSize[NO_BOTTLES];
     bool bottleDraw[NO_BOTTLES];
     vmml::Vector3f bottlePos[NO_BOTTLES];

@@ -73,7 +73,7 @@ void RenderProject::initFunction()
     for (int i = 0; i < NO_BOTTLES; i++) {
         bottleSize[i] = 0.7f;
         bottleDraw[i] = true;
-        bottlePos[i] = vmml::Vector3f(float(rand() % 400 - 200), -198.0f, float(rand() % 400 - 200));
+        bottlePos[i] = vmml::Vector3f(float(rand() % 800 - 200), -198.0f, float(rand() % 800 - 200));
     }
     
     
@@ -82,7 +82,7 @@ void RenderProject::initFunction()
 	//std::cout << "shark: " << sharkPos << std::endl;
 
 	// set position of chest
-	chestPos = vmml::Vector3f(float(rand() % 300 - 150), -193.0f, float(rand() % 300 - 150));
+	chestPos = vmml::Vector3f(float(rand() % 1000 - 150), -193.0f, float(rand() % 1000 - 150));
     
     if (Input::isTouchDevice()){
         bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nFind some extra air on your way - but be aware of the shark! \n \nDouble tap to start", font);}
