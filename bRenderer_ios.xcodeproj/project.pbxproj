@@ -75,6 +75,8 @@
 		0749E9351EF8567F001E1AD9 /* temple.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0749E8CD1EF8567F001E1AD9 /* temple.obj */; };
 		0749E9361EF8567F001E1AD9 /* temple.vert in Resources */ = {isa = PBXBuildFile; fileRef = 0749E8CE1EF8567F001E1AD9 /* temple.vert */; };
 		0749E9371EF8567F001E1AD9 /* texture_shell.png in Resources */ = {isa = PBXBuildFile; fileRef = 0749E8CF1EF8567F001E1AD9 /* texture_shell.png */; };
+		0749E93A1EF85DDD001E1AD9 /* garrafa.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 0749E9381EF85DDD001E1AD9 /* garrafa.mtl */; };
+		0749E93B1EF85DDD001E1AD9 /* garrafa.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0749E9391EF85DDD001E1AD9 /* garrafa.obj */; };
 		B44186971BA331E300604D7F /* RenderProject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B44186961BA331E300604D7F /* RenderProject.cpp */; };
 		B4794A2A1BA6743D00B5E9DC /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = B47949C41BA6743D00B5E9DC /* LICENSE.txt */; };
 		B4794A2B1BA6743D00B5E9DC /* platform.c in Sources */ = {isa = PBXBuildFile; fileRef = B47949C61BA6743D00B5E9DC /* platform.c */; };
@@ -242,6 +244,8 @@
 		0749E8CD1EF8567F001E1AD9 /* temple.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = temple.obj; sourceTree = "<group>"; };
 		0749E8CE1EF8567F001E1AD9 /* temple.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = temple.vert; sourceTree = "<group>"; };
 		0749E8CF1EF8567F001E1AD9 /* texture_shell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture_shell.png; sourceTree = "<group>"; };
+		0749E9381EF85DDD001E1AD9 /* garrafa.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = garrafa.mtl; sourceTree = "<group>"; };
+		0749E9391EF85DDD001E1AD9 /* garrafa.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = garrafa.obj; sourceTree = "<group>"; };
 		B44186941BA331E300604D7F /* RenderProject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderProject.h; sourceTree = "<group>"; };
 		B44186961BA331E300604D7F /* RenderProject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderProject.cpp; sourceTree = "<group>"; };
 		B47949C01BA6743D00B5E9DC /* bRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bRenderer.h; sourceTree = "<group>"; };
@@ -517,6 +521,8 @@
 				0749E8C51EF8567F001E1AD9 /* submarine.frag */,
 				0749E8C61EF8567F001E1AD9 /* submarine.jpg */,
 				0749E8C71EF8567F001E1AD9 /* submarine.mtl */,
+				0749E9381EF85DDD001E1AD9 /* garrafa.mtl */,
+				0749E9391EF85DDD001E1AD9 /* garrafa.obj */,
 				0749E8C81EF8567F001E1AD9 /* submarine.obj */,
 				0749E8C91EF8567F001E1AD9 /* submarine.vert */,
 				0749E8CA1EF8567F001E1AD9 /* temple.frag */,
@@ -887,6 +893,7 @@
 				0749E9311EF8567F001E1AD9 /* submarine.vert in Resources */,
 				0749E9001EF8567F001E1AD9 /* ring.obj in Resources */,
 				0749E8D91EF8567F001E1AD9 /* border.vert in Resources */,
+				0749E93B1EF85DDD001E1AD9 /* garrafa.obj in Resources */,
 				0749E8DE1EF8567F001E1AD9 /* bump_texture_shell.png in Resources */,
 				0749E8FD1EF8567F001E1AD9 /* plane.obj in Resources */,
 				0749E8F51EF8567F001E1AD9 /* monster.jpg in Resources */,
@@ -904,6 +911,7 @@
 				0749E8D51EF8567F001E1AD9 /* basicTitle_light.png in Resources */,
 				0749E9031EF8567F001E1AD9 /* rock.obj in Resources */,
 				0749E9281EF8567F001E1AD9 /* shark.frag in Resources */,
+				0749E93A1EF85DDD001E1AD9 /* garrafa.mtl in Resources */,
 				0749E8DA1EF8567F001E1AD9 /* bubble.mtl in Resources */,
 				0749E9041EF8567F001E1AD9 /* rock.png in Resources */,
 				0749E8E31EF8567F001E1AD9 /* Chest.mtl in Resources */,
