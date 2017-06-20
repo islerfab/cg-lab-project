@@ -94,7 +94,7 @@ void main() {
 	vec4 color = diffuse * vec4(Kd, 1.0) + vec4(causticColor, 1.0);
 
 	// Fog effect
-	float fogFactor = pow(0.98, distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));
+	float fogFactor = pow(1.01, -distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));
 	color.rgb = color.rgb * fogFactor + (1.0 - fogFactor) * waterAmbient;
 
 	
