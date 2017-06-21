@@ -72,6 +72,7 @@ private:
     int _air = 100;
     int _airCounter = 0;
     int _airLeft = 100;
+	bool _lostAir = false;
 
     
     

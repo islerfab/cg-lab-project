@@ -110,9 +110,8 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("ray.obj", 0, FLIP_Z | SHADER_FROM_FILE);
 
     //game state
-    for(int i = 0; i< 101;){
+    for(int i = 0; i <= 100; i += 5){
         bRenderer().getObjects()->createTextSprite("gameState "+std::to_string(i), vmml::Vector3f(1,1,1), "air:"+std::to_string(100-i)+"%", font);
-        i = i+5;
     }
     
 
@@ -260,15 +259,18 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         
         //game state
         float start_time = clock();
-        
+	
         //the higher the more time you have to find the treasure
-        if((int)(start_time/10000) % 50 > 48)
+        if((int)_offset % 20 < 10 && !_lostAir)
         {
-            _airLeft = _air-_airCounter;
+			_lostAir = true;
             _airCounter = _airCounter+5;
+        } else if ((int)_offset % 20 >= 10)
+        {
+			_lostAir = false;
         }
         
-        if(_airLeft == 0){
+        if(_airCounter >= 100){
             
             /// GAME OVER ///
             
@@ -578,7 +580,6 @@ void RenderProject::resetGame(){
     _win = false;
     _gameOver = false;
     _airCounter = 0;
-    _airLeft = 100;
     init();
     initFunction();
 }
