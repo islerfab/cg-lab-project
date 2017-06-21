@@ -1,6 +1,7 @@
-illum 4
-Kd 0.12 0.12 0.12
-Ka 0.00 0.00 0.00
-# Tf 1.00 1.00 1.00
-# Ni 1.00
-map_Kd green.jpg
+newmtl bottle
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ni 1.000000
+d 1.000000
+map_Kd green2.jpg
+map_Custom1 caustic_map.jpg
