@@ -109,7 +109,6 @@ void RenderProject::initFunction()
     bRenderer().getObjects()->loadObjModel_o("bottle.obj", customShader, FLIP_Z);
 	bRenderer().getObjects()->loadObjModel_o("ray.obj", 0, FLIP_Z | SHADER_FROM_FILE);
 
-
     //game state
     for(int i = 0; i< 101;){
         bRenderer().getObjects()->createTextSprite("gameState "+std::to_string(i), vmml::Vector3f(1,1,1), "air:"+std::to_string(100-i)+"%", font);
