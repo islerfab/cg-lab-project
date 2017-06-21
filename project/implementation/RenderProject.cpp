@@ -106,7 +106,7 @@ void RenderProject::initFunction()
     bRenderer().getObjects()->loadObjModel_o("submarine.obj", 4, SHADER_FROM_FILE, causticProperties);
 	bRenderer().getObjects()->loadObjModel_o("temple.obj", 4, SHADER_FROM_FILE, causticProperties);
 	bRenderer().getObjects()->loadObjModel_o("pillars.obj", 4, SHADER_FROM_FILE, causticProperties);
-    bRenderer().getObjects()->loadObjModel_o("bottle.obj", customShader, FLIP_Z);
+    bRenderer().getObjects()->loadObjModel_o("bottle.obj", 4, SHADER_FROM_FILE, causticProperties);
 	bRenderer().getObjects()->loadObjModel_o("ray.obj", 0, FLIP_Z | SHADER_FROM_FILE);
 
     //game state
