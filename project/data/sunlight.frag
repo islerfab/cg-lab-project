@@ -16,8 +16,8 @@ void main() {
 	float fogFactor = pow(1.01, -distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));
 	color.rgb = color.rgb * fogFactor + (1.0 - fogFactor) * vec3(0.0, 0.0, 0.0);
 
-	color.a = color.a / 1000.0 * y;
+	// color.a = color.a / 1000.0 * y;
 	
-	gl_FragColor = clamp(color, 0.0, 1.0);
-	// gl_FragColor = vec4(waterAmbient, 1.0);
+	// gl_FragColor = clamp(color, 0.0, 1.0);
+	gl_FragColor = clamp(vec4(y, 0.0, 0.0, 1.0), 0.0, 1.0);
 }
