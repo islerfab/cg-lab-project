@@ -74,6 +74,8 @@ private:
 
 	/* objects */
 	vmml::Vector3f sharkPos;
+	float sharkHeight;
+	vmml::Vector3f sharkUp;
 	vmml::Vector3f chestPos;
 
 	/* plants */

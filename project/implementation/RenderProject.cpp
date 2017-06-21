@@ -66,23 +66,26 @@ void RenderProject::initFunction()
     // fill arrays for plants
     for (int i = 0; i < NO_PLANTS; i++) {
         plantSizes[i] = rand() % 71 + 30;
-        plantPos[i] = vmml::Vector3f(float(rand() % 400 - 200), -198.0f, float(rand() % 400 - 200));
+        plantPos[i] = vmml::Vector3f(float(rand() % 800 - 400), -198.0f, float(rand() % 800 - 400));
     }
     
     // fill arrays for bottles
     for (int i = 0; i < NO_BOTTLES; i++) {
         bottleSize[i] = 0.7f;
         bottleDraw[i] = true;
-        bottlePos[i] = vmml::Vector3f(float(rand() % 800 - 200), -198.0f, float(rand() % 800 - 200));
+        bottlePos[i] = vmml::Vector3f(float(rand() % 800 - 400), -198.0f, float(rand() % 800 - 400));
     }
     
     
     // set position of shark
-    sharkPos = vmml::Vector3f(float(rand() % 200 - 100), -160.0f, float(rand() % 200 - 100));
-	//std::cout << "shark: " << sharkPos << std::endl;
+	sharkHeight = -160.0f;
+	//sharkPos = vmml::Vector3f(10.0f, sharkHeight, 10.0f);
+    sharkPos = vmml::Vector3f(float(rand() % 600 - 300), sharkHeight, float(rand() % 600 - 300));
+	//std::cout << "sharkpos: " << sharkPos << std::endl;
 
 	// set position of chest
-	chestPos = vmml::Vector3f(float(rand() % 1000 - 150), -193.0f, float(rand() % 1000 - 150));
+	//chestPos = vmml::Vector3f(float(rand() % 1000 - 150), -193.0f, float(rand() % 1000 - 150));
+	chestPos = vmml::Vector3f(180.0f, -198.0f, -120.0f);
     
     if (Input::isTouchDevice()){
         bRenderer().getObjects()->createTextSprite("instructions", vmml::Vector3f(1,1,1), "Try to find the treasure before your air runs out \n \nFind some extra air on your way - but be aware of the shark! \n \nDouble tap to start", font);}
@@ -94,17 +97,14 @@ void RenderProject::initFunction()
     
     // load models
     bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
-    bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE);
     bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
     bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
     bRenderer().getObjects()->loadObjModel_o("Chest.obj", customShader, FLIP_Z);									// the custom shader created above is used
-    bRenderer().getObjects()->loadObjModel_o("plane.obj", 4, SHADER_FROM_FILE);
+    bRenderer().getObjects()->loadObjModel_o("plane.obj", 4, SHADER_FROM_FILE, causticProperties);
     bRenderer().getObjects()->loadObjModel_o("shark.obj", customShader, FLIP_Z);
-    bRenderer().getObjects()->loadObjModel_o("submarine.obj", 4, SHADER_FROM_FILE);
-    bRenderer().getObjects()->loadObjModel_o("rock.obj", 4, SHADER_FROM_FILE);
-    bRenderer().getObjects()->loadObjModel_o("debris.obj", 4, SHADER_FROM_FILE);
-	bRenderer().getObjects()->loadObjModel_o("temple.obj", 4, SHADER_FROM_FILE);
-	bRenderer().getObjects()->loadObjModel_o("pillars.obj", 4, SHADER_FROM_FILE);
+    bRenderer().getObjects()->loadObjModel_o("submarine.obj", 4, SHADER_FROM_FILE, causticProperties);
+	bRenderer().getObjects()->loadObjModel_o("temple.obj", 4, SHADER_FROM_FILE, causticProperties);
+	bRenderer().getObjects()->loadObjModel_o("pillars.obj", 4, SHADER_FROM_FILE, causticProperties);
     bRenderer().getObjects()->loadObjModel_o("bottle.obj", customShader, FLIP_Z);
 
     
@@ -234,8 +234,12 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
 			_randomOffset += (randomNumber(10.0f, 20.0f)) * deltaTime;
 		}
         
-        
-    
+        // update shark position
+		vmml::Vector3f sharkTemp = vmml::normalize(vmml::Vector3f(sharkPos.x(), 0.0f, sharkPos.z()));
+		sharkUp = sharkTemp.cross(vmml::Vector3f(0.0f, 1.0f, 0.0f));
+		sharkPos -= sharkUp;
+		//std::cout << "update: " << sharkPos << std::endl;
+
         FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
         //game state
         bRenderer().getObjects()->createTextSprite("gameState", vmml::Vector3f(1,1,1), "air: " + std::to_string(100) + "%"  , font);
@@ -305,15 +309,10 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     // Set offset
     bRenderer().getObjects()->getProperties("causticProperties")->setScalar("offset", _offset);		// pass offset for wave effect
     bRenderer().getObjects()->getProperties("causticProperties")->setVector("waterAmbient", vmml::Vector3f(0.1, 0.1f, 0.15f));		// pass ambient color (could be changing dynamically)
-    
 
-    // Cube
-    vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 0.0f)) * vmml::create_scaling(vmml::Vector3f(20.0f));
-    // submit to render queue
-    bRenderer().getModelRenderer()->queueModelInstance("cube", "cube_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
     
     // Floor
-    modelMatrix = vmml::create_translation(vmml::Vector3f(50.0f, -199.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(2.20f)) * vmml::create_translation(vmml::Vector3f(-500.0f, 0.0f, 0.0f));
+    vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(50.0f, -199.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(2.20f)) * vmml::create_translation(vmml::Vector3f(-500.0f, 0.0f, 0.0f));
     // First quarter
     bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     // Second quarter
@@ -331,22 +330,12 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     bRenderer().getModelRenderer()->queueModelInstance("plane", "plane_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
     // shark
-    modelMatrix = vmml::create_translation(sharkPos) * vmml::create_scaling(vmml::Vector3f(0.4f)) * vmml::create_rotation(float(M_PI), vmml::Vector3f::UNIT_Y);
+	modelMatrix = vmml::create_translation(sharkPos) * vmml::create_scaling(vmml::Vector3f(0.4f)) * vmml::create_rotation((float) 1 * acos(sharkUp.dot(vmml::Vector3f::UNIT_Z) / sharkUp.length()), vmml::Vector3f::UNIT_Y);// * vmml::create_rotation(float(M_PI), vmml::Vector3f::UNIT_Y);
     bRenderer().getModelRenderer()->queueModelInstance("shark", "shark_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
-    
 
     // submarine
     modelMatrix = vmml::create_translation(vmml::Vector3f(10.0f, -140.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(0.4f));
     bRenderer().getModelRenderer()->queueModelInstance("submarine", "submarine_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
-    
-    /*/ rock
-    modelMatrix = vmml::create_translation(vmml::Vector3f(30.0f, -190.0f, 30.0f)) * vmml::create_scaling(vmml::Vector3f(0.2f));
-    bRenderer().getModelRenderer()->queueModelInstance("rock", "rock_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
-    /
-    // debris
-    modelMatrix = vmml::create_translation(vmml::Vector3f(30.0f, -190.0f, -70.0f)) * vmml::create_scaling(vmml::Vector3f(2.2f));
-    bRenderer().getModelRenderer()->queueModelInstance("debris", "debris_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
-    */
 
 
     /*** Plants ***/
@@ -388,17 +377,15 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     }*/
 
 	// temple
-	modelMatrix = vmml::create_translation(vmml::Vector3f(-160.0f, -180.0f, 80.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f));
+	modelMatrix = vmml::create_translation(vmml::Vector3f(-160.0f, -200.0f, 80.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f));
 	bRenderer().getModelRenderer()->queueModelInstance("temple", "temple_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
 	// pillars
-	modelMatrix = vmml::create_translation(vmml::Vector3f(160.0f, -190.0f, -80.0f)) * vmml::create_scaling(vmml::Vector3f(0.5f)) * vmml::create_rotation(float(-M_PI/2), vmml::Vector3f::UNIT_X);
-	bRenderer().getModelRenderer()->queueModelInstance("pillars", "pillars_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
+	//modelMatrix = vmml::create_translation(vmml::Vector3f(160.0f, -190.0f, -80.0f)) * vmml::create_scaling(vmml::Vector3f(0.5f)) * vmml::create_rotation(float(3 * M_PI / 2), vmml::Vector3f::UNIT_X) * vmml::create_rotation(float(M_PI), vmml::Vector3f::UNIT_Y);
+	//bRenderer().getModelRenderer()->queueModelInstance("pillars", "pillars_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 
     // reset ambient color
     bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
-
-
 }
 
 /* Camera movement */
@@ -513,6 +500,7 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
         
         // check if near shark
         vmml::Vector3f campos = bRenderer().getObjects()->getCamera(camera)->getPosition();
+		//std::cout << "pos: " << campos << std::endl;
         if (campos.distance(-sharkPos) < 40) {
             _running = false;
             _dead = true;

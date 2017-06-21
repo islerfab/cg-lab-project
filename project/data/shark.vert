@@ -47,10 +47,12 @@ attribute vec3 Tangent;
 attribute vec3 Bitangent;
 attribute vec4 TexCoord;
 
+varying vec4 texCoordVarying;
+
 void main() {
 	vec4 posViewSpace = ModelViewMatrix*Position;
 	surfaceToCamera = - posViewSpace.xyz;
-	causticTexCoord = vec2((Position.x + 500.0) / 1000.0, Position.z / 1000.0) * 2.0;
+	causticTexCoord = vec2((Position.x + 500.0) / 100.0, Position.z / 100.0) * 2.0;
 	float lightDistance = 0.0;
 	vec3 vertexNormal_ViewSpace = mat3(ModelViewMatrix) * Normal;
 	n = vertexNormal_ViewSpace;
@@ -93,6 +95,8 @@ void main() {
 	if (lightDistance <= lightRadius_3) {
 		intensityBasedOnDist_3 = clamp(lightIntensity_3 / (lightAttenuation_3*lightDistance*lightDistance), 0.0, 1.0);
 	};
+	
+	texCoordVarying = TexCoord;
 
 	gl_Position = ProjectionMatrix*posViewSpace;
 }

@@ -45,6 +45,8 @@ uniform vec3 Kd;
 uniform float offset;
 uniform vec3 waterAmbient;
 
+varying vec4 texCoordVarying;
+
 void main() {
 	vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
 	vec3 surfaceNormal = normalize(n);
@@ -83,12 +85,21 @@ void main() {
 		diffuse += vec4(lightDiffuseColor_3 * (intensity * intensityBasedOnDist_3), 0.0);
 	}
 
-	vec4 color = diffuse * vec4(Kd, 1.0);
+	// Caustic effect
+	vec2 uv = causticTexCoord;
+	vec2 dt;
+	dt.x = sin(uv.y * 50.0 + offset / 2.0) / 250.0;
+	dt.y = sin(uv.x * 10.0 + offset / 2.0) / 100.0;
+	
+	vec3 causticColor = texture2D(CustomMap_1, uv + dt).xyz / 2.0;	// Reduce intensity a bit by dividing it by 2
+
+	vec4 color = diffuse * vec4(Kd, 1.0) + vec4(causticColor, 1.0) + texture2DProj(DiffuseMap, texCoordVarying);
 
 	// Fog effect
-	float fogFactor = pow(0.98, distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));
+	float fogFactor = pow(1.01, -distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));
 	color.rgb = color.rgb * fogFactor + (1.0 - fogFactor) * waterAmbient;
 
+	//color = texture2DProj(DiffuseMap, texCoordVarying);
 	
 	gl_FragColor = clamp(color, 0.0, 1.0);
 	// gl_FragColor = vec4(waterAmbient, 1.0);
