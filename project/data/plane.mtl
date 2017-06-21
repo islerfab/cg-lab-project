@@ -1,5 +1,12 @@
-# Exported from 3D Builder
+# Blender MTL File: 'None'
+# Material Count: 1
 
 newmtl plane
-Kd 0.600000 0.600000 0.600000
+Ns 319.607843
+Ka 0.400000 0.400000 0.400000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
 map_Kd monster.jpg
