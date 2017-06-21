@@ -107,6 +107,10 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("pillars.obj", 4, SHADER_FROM_FILE, causticProperties);
     bRenderer().getObjects()->loadObjModel_o("bottle.obj", customShader, FLIP_Z);
 
+    //game state
+    for(int i = 0; i< 101; i++){
+        bRenderer().getObjects()->createTextSprite("gameState "+std::to_string(i), vmml::Vector3f(1,1,1), "air:"+std::to_string(100-i)+"%", font);
+    }
     
 
     bRenderer().getObjects()->createTextSprite("dead", vmml::Vector3f(1, 1, 1), "SHARK FOOD OMNOMNOM", font);
@@ -229,53 +233,45 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
     
 
 	if (_running) {
-		if (deltaTime > 0.0f) {
-			_offset += 5 * deltaTime;
-			_randomOffset += (randomNumber(10.0f, 20.0f)) * deltaTime;
-		}
+        
         
         // update shark position
-		vmml::Vector3f sharkTemp = vmml::normalize(vmml::Vector3f(sharkPos.x(), 0.0f, sharkPos.z()));
-		sharkUp = sharkTemp.cross(vmml::Vector3f(0.0f, 1.0f, 0.0f));
-		sharkPos -= sharkUp;
-		//std::cout << "update: " << sharkPos << std::endl;
-
-        FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
+        vmml::Vector3f sharkTemp = vmml::normalize(vmml::Vector3f(sharkPos.x(), 0.0f, sharkPos.z()));
+        sharkUp = sharkTemp.cross(vmml::Vector3f(0.0f, 1.0f, 0.0f));
+        sharkPos -= sharkUp;
+        //std::cout << "update: " << sharkPos << std::endl;
+        
         //game state
-        bRenderer().getObjects()->createTextSprite("gameState", vmml::Vector3f(1,1,1), "air: " + std::to_string(100) + "%"  , font);
-        clock_t start_time = clock();
-        int airLeft = 100;
-    
+        float start_time = clock();
+        
         //the higher the more time you have to find the treasure
-        if((int)(start_time/10000) % 6 > 4)
+        if((int)(start_time/10000) % 8 > 6)
         {
-            airLeft = _air-_airCounter;
+            _airLeft = _air-_airCounter;
             _airCounter++;
         }
         
-        //game state
-        bRenderer().getObjects()->createTextSprite("gameState"+ std::to_string(_airCounter), vmml::Vector3f(1,1,1), "air: " + std::to_string(airLeft) + "%"  , font);
         
-        vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
-        
-        GLfloat titleScale = 0.1f;
-        vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
-        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
-        
-        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.7f, -0.65f)) * scaling;
-        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameState"+std::to_string(_airCounter)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
-        
-        if(airLeft == 0){
+        _updateSprite = _updateSprite + 1;
+
+        if(_airLeft == 0){
             
             /// GAME OVER ///
-          
+            
             //reset counter
             _airCounter = 0;
             _gameOver = true;
             _running = !_running;
-
-
+            
+            
         }
+        
+		if (deltaTime > 0.0f) {
+			_offset += 5 * deltaTime;
+			_randomOffset += (randomNumber(10.0f, 20.0f)) * deltaTime;
+           
+		}
+
 
 	}
     
@@ -330,7 +326,7 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     bRenderer().getModelRenderer()->queueModelInstance("plane", "plane_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     
     // shark
-	modelMatrix = vmml::create_translation(sharkPos) * vmml::create_scaling(vmml::Vector3f(0.4f)) * vmml::create_rotation((float) 1 * acos(sharkUp.dot(vmml::Vector3f::UNIT_Z) / sharkUp.length()), vmml::Vector3f::UNIT_Y);// * vmml::create_rotation(float(M_PI), vmml::Vector3f::UNIT_Y);
+	modelMatrix = vmml::create_translation(sharkPos) * vmml::create_scaling(vmml::Vector3f(0.4f)) * vmml::create_rotation(float(1 * acos(sharkUp.dot(vmml::Vector3f::UNIT_Z) / sharkUp.length())), vmml::Vector3f::UNIT_Y);// * vmml::create_rotation(float(M_PI), vmml::Vector3f::UNIT_Y);
     bRenderer().getModelRenderer()->queueModelInstance("shark", "shark_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
 
     // submarine
@@ -494,6 +490,21 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
     
     //// Update camera ////
     if (_running){
+        
+        FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
+            
+        vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
+            
+        GLfloat titleScale = 0.1f;
+        vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
+            
+        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.7f, -0.65f)) * scaling;
+        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameState "+std::to_string(_airCounter)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+
+        
+        
+        
         bRenderer().getObjects()->getCamera(camera)->moveCameraForward(cameraForward*_cameraSpeed*deltaTime);
         bRenderer().getObjects()->getCamera(camera)->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
         bRenderer().getObjects()->getCamera(camera)->moveCameraSideward(cameraSideward*_cameraSpeed*deltaTime);
