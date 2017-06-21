@@ -10,3 +10,4 @@ Ks 0.000000 0.000000 0.000000
 # d 1.000000
 # illum 1
 map_Kd Chest_diffuse.jpg
+map_Custom1 caustic_map.png
