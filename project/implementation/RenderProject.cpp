@@ -100,13 +100,13 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE, causticProperties);
     bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
     bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
-    bRenderer().getObjects()->loadObjModel_o("Chest.obj", customShader, FLIP_Z);									// the custom shader created above is used
+    bRenderer().getObjects()->loadObjModel_o("Chest.obj", 4, SHADER_FROM_FILE, causticProperties);									// the custom shader created above is used
     bRenderer().getObjects()->loadObjModel_o("plane.obj", 4, SHADER_FROM_FILE, causticProperties);
     bRenderer().getObjects()->loadObjModel_o("shark.obj", customShader, FLIP_Z);
     bRenderer().getObjects()->loadObjModel_o("submarine.obj", 4, SHADER_FROM_FILE, causticProperties);
 	bRenderer().getObjects()->loadObjModel_o("temple.obj", 4, SHADER_FROM_FILE, causticProperties);
 	bRenderer().getObjects()->loadObjModel_o("pillars.obj", 4, SHADER_FROM_FILE, causticProperties);
-    bRenderer().getObjects()->loadObjModel_o("bottle.obj", customShader, FLIP_Z);
+    bRenderer().getObjects()->loadObjModel_o("bottle.obj", 4, SHADER_FROM_FILE, causticProperties);
 	bRenderer().getObjects()->loadObjModel_o("ray.obj", 0, FLIP_Z | SHADER_FROM_FILE);
 
     //game state
