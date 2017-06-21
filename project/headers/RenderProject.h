@@ -71,8 +71,10 @@ private:
     bool _gameOver = false;
     int _air = 100;
     int _airCounter = 0;
-    int _updateSprite = 0;
     int _airLeft = 100;
+
+    
+    
 
 
 	/* objects */

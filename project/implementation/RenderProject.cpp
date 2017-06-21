@@ -108,8 +108,9 @@ void RenderProject::initFunction()
     bRenderer().getObjects()->loadObjModel_o("bottle.obj", customShader, FLIP_Z);
 
     //game state
-    for(int i = 0; i< 101; i++){
+    for(int i = 0; i< 101;){
         bRenderer().getObjects()->createTextSprite("gameState "+std::to_string(i), vmml::Vector3f(1,1,1), "air:"+std::to_string(100-i)+"%", font);
+        i = i+5;
     }
     
 
@@ -234,6 +235,11 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
 
 	if (_running) {
         
+        if (deltaTime > 0.0f) {
+            _offset += 5 * deltaTime;
+            _randomOffset += (randomNumber(10.0f, 20.0f)) * deltaTime;
+            
+        }
         
         // update shark position
         vmml::Vector3f sharkTemp = vmml::normalize(vmml::Vector3f(sharkPos.x(), 0.0f, sharkPos.z()));
@@ -241,37 +247,40 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         sharkPos -= sharkUp;
         //std::cout << "update: " << sharkPos << std::endl;
         
+        FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
+        
+        vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
+        
+        GLfloat titleScale = 0.1f;
+        vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
+        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
+        
+        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.7f, -0.65f)) * scaling;
+        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameState "+std::to_string(_airCounter)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+        
         //game state
         float start_time = clock();
         
         //the higher the more time you have to find the treasure
-        if((int)(start_time/10000) % 8 > 6)
+        if((int)(start_time/10000) % 50 > 48)
         {
             _airLeft = _air-_airCounter;
-            _airCounter++;
+            _airCounter = _airCounter+5;
         }
-        
-        
-        _updateSprite = _updateSprite + 1;
 
+        
         if(_airLeft == 0){
             
             /// GAME OVER ///
             
             //reset counter
-            _airCounter = 0;
             _gameOver = true;
             _running = !_running;
-            
-            
+            return;
         }
         
-		if (deltaTime > 0.0f) {
-			_offset += 5 * deltaTime;
-			_randomOffset += (randomNumber(10.0f, 20.0f)) * deltaTime;
-           
-		}
-
+        
+     
 
 	}
     
@@ -491,20 +500,6 @@ void RenderProject::updateCamera(const std::string &camera, const double &deltaT
     //// Update camera ////
     if (_running){
         
-        FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
-            
-        vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
-            
-        GLfloat titleScale = 0.1f;
-        vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / bRenderer().getView()->getAspectRatio(), titleScale, titleScale));
-        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.4f, 0.0f, -0.65f)) * scaling;
-            
-        modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.7f, -0.65f)) * scaling;
-        bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameState "+std::to_string(_airCounter)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
-
-        
-        
-        
         bRenderer().getObjects()->getCamera(camera)->moveCameraForward(cameraForward*_cameraSpeed*deltaTime);
         bRenderer().getObjects()->getCamera(camera)->rotateCamera(deltaCameraX, deltaCameraY, 0.0f);
         bRenderer().getObjects()->getCamera(camera)->moveCameraSideward(cameraSideward*_cameraSpeed*deltaTime);
@@ -564,6 +559,7 @@ void RenderProject::resetGame(){
     _win = false;
     _gameOver = false;
     _airCounter = 0;
+    _airLeft = 100;
     init();
     initFunction();
 }
