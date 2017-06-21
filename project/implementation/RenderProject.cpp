@@ -247,8 +247,6 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         sharkPos -= sharkUp;
         //std::cout << "update: " << sharkPos << std::endl;
         
-        FontPtr font = bRenderer().getObjects()->loadFont("KozGoPro-ExtraLight.otf", 50);
-        
         vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
         
         GLfloat titleScale = 0.1f;
@@ -267,7 +265,6 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
             _airLeft = _air-_airCounter;
             _airCounter = _airCounter+5;
         }
-
         
         if(_airLeft == 0){
             
@@ -276,7 +273,6 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
             //reset counter
             _gameOver = true;
             _running = !_running;
-            return;
         }
         
         
@@ -380,6 +376,10 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
             bRenderer().getModelRenderer()->queueModelInstance("lambis_truncata_shell", &"shell_instance_" [ count++], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
         }
     }*/
+    
+    
+  
+    
 
 	// temple
 	modelMatrix = vmml::create_translation(vmml::Vector3f(-160.0f, -200.0f, 80.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f));
