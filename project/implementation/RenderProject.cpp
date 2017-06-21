@@ -71,7 +71,7 @@ void RenderProject::initFunction()
     
     // fill arrays for bottles
     for (int i = 0; i < NO_BOTTLES; i++) {
-        bottleSize[i] = 0.7f;
+        bottleSize[i] = 1.0f;
         bottleDraw[i] = true;
         bottlePos[i] = vmml::Vector3f(float(rand() % 800 - 400), -198.0f, float(rand() % 800 - 400));
     }

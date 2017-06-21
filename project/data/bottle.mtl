@@ -1,6 +1,7 @@
-newmtl lambert8SG
+newmtl lambert6SG
 # illum 4
 Kd 0.50 0.50 0.50
 Ka 0.00 0.00 0.00
 # Tf 0.65 0.65 0.65
 # Ni 1.00
+map_Custom1 caustic_map.png
