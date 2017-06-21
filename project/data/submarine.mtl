@@ -2,5 +2,8 @@
 
 newmtl submarine
 Kd 0.800000 0.800000 0.800000
+Ns 319.0
+Ks 10.0 10.0 10.0
 
 map_Kd submarine.jpg
+map_Custom1 caustic_map.jpg

@@ -1,5 +1,8 @@
 # Exported from 3D Builder
 
 newmtl shark
-Kd 1.000000 1.000000 1.000000
+Kd 0.600000 0.600000 0.600000
+Ks 2.0 2.0 2.0
 map_Kd shark.png
+map_Custom1 caustic_map.jpg
+Ns 100.0
