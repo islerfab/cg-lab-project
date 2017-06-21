@@ -97,6 +97,7 @@ void RenderProject::initFunction()
     
     // load models
     bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE, causticProperties);
     bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
     bRenderer().getObjects()->loadObjModel_o("lambis_truncata_shell.obj", 4, FLIP_Z | SHADER_FROM_FILE);
     bRenderer().getObjects()->loadObjModel_o("Chest.obj", customShader, FLIP_Z);									// the custom shader created above is used
@@ -106,6 +107,8 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("temple.obj", 4, SHADER_FROM_FILE, causticProperties);
 	bRenderer().getObjects()->loadObjModel_o("pillars.obj", 4, SHADER_FROM_FILE, causticProperties);
     bRenderer().getObjects()->loadObjModel_o("bottle.obj", customShader, FLIP_Z);
+	bRenderer().getObjects()->loadObjModel_o("ray.obj", 0, FLIP_Z | SHADER_FROM_FILE);
+
 
     
 
@@ -310,9 +313,13 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
     bRenderer().getObjects()->getProperties("causticProperties")->setScalar("offset", _offset);		// pass offset for wave effect
     bRenderer().getObjects()->getProperties("causticProperties")->setVector("waterAmbient", vmml::Vector3f(0.1, 0.1f, 0.15f));		// pass ambient color (could be changing dynamically)
 
-    
+	// Cube
+	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 0.0f)) * vmml::create_scaling(vmml::Vector3f(20.0f));
+	// submit to render queue
+	bRenderer().getModelRenderer()->queueModelInstance("cube", "cube_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
+
     // Floor
-    vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(50.0f, -199.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(2.20f)) * vmml::create_translation(vmml::Vector3f(-500.0f, 0.0f, 0.0f));
+    modelMatrix = vmml::create_translation(vmml::Vector3f(50.0f, -199.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(2.20f)) * vmml::create_translation(vmml::Vector3f(-500.0f, 0.0f, 0.0f));
     // First quarter
     bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     // Second quarter
@@ -383,6 +390,19 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 	// pillars
 	//modelMatrix = vmml::create_translation(vmml::Vector3f(160.0f, -190.0f, -80.0f)) * vmml::create_scaling(vmml::Vector3f(0.5f)) * vmml::create_rotation(float(3 * M_PI / 2), vmml::Vector3f::UNIT_X) * vmml::create_rotation(float(M_PI), vmml::Vector3f::UNIT_Y);
 	//bRenderer().getModelRenderer()->queueModelInstance("pillars", "pillars_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
+
+	// God Rays
+	int count = 0;
+	for (int i = 0; i < 1; i++) {
+		for (int j = 0; j < 1; j++) {
+			// translate and scale
+			modelMatrix = vmml::create_translation(vmml::Vector3f(i*50.0f, -0.0f, j*50.0f)) * vmml::create_rotation(float(M_PI / 4), vmml::Vector3f::UNIT_X) * vmml::create_scaling(vmml::Vector3f(1.0f));
+			// submit to render queue
+			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
+			bRenderer().getModelRenderer()->queueModelInstance("ray", &"ray_instance_"[count++], camera, modelMatrix, std::vector<std::string>());
+		}
+	}
+
 
     // reset ambient color
     bRenderer().getObjects()->setAmbientColor(bRenderer::DEFAULT_AMBIENT_COLOR());
