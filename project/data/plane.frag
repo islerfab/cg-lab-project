@@ -44,11 +44,12 @@ varying vec2 causticTexCoord;
 uniform vec3 Kd;
 uniform float offset;
 uniform vec3 waterAmbient;
-
 varying vec4 texCoordVarying;
+uniform float Ns;
 
 void main() {
 	vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
+	vec4 specular = vec4(0.0, 0.0, 0.0, 1.0);
 	vec3 surfaceNormal = normalize(n);
 
 	// The camera in view space goes towards the z-axis
@@ -65,6 +66,8 @@ void main() {
 			&& dot(normalize(surfaceToCamera), -cameraDirection) > 0.95) {
 		intensity = clamp(intensity, 0.0, 1.0);
 		diffuse += vec4(lightDiffuseColor_0 * (intensity * intensityBasedOnDist_0), 0.0);
+		float specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-normalize(lightVectorTangentSpace_1), surfaceNormal))), Ns);
+		specular += vec4(lightSpecularColor_1 * (specularCoefficient * intensity * intensityBasedOnDist_1), 0.0);
 	}
 	
 	// Second Light
@@ -94,21 +97,7 @@ void main() {
 	vec3 causticColor = texture2D(CustomMap_1, uv + dt).xyz / 2.0;	// Reduce intensity a bit by dividing it by 2
 	vec3 textureColor = texture2D(DiffuseMap, texCoordVarying.st).xyz;
 
-	// TODO: Add specular component as well (it was not necessary for sandy dune, but a plane has to have it)
-	// OLD CODE FOR THIS:
-	//	if (intensityBasedOnDist_1 > 0.0 && (intensity = max(dot(surfaceNormal, normalize(lightVectorTangentSpace_1)), 0.0)) > 0.0){
-	//		intensity = clamp(intensity, 0.0, 1.0);
-	//		diffuse += vec4(lightDiffuseColor_1 * (intensity * intensityBasedOnDist_1), 0.0);
-	//		specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-normalize(lightVectorTangentSpace_1), surfaceNormal))), Ns);
-	//		specular += vec4(lightSpecularColor_1 * (specularCoefficient * intensity * intensityBasedOnDist_1), 0.0);
-	//	}
-	//
-	//	diffuse = diffuse * vec4(Kd,1.0);
-	//	specular = specular  * vec4(Ks, 0.0);
-	//	gl_FragColor = clamp(diffuse+specular, 0.0, 1.0);
-
-	// TODO: Make "diffuse" variable that's dependent on the headlight have an influence as well
-	vec4 color = vec4(textureColor, 1.0) + vec4(causticColor, 1.0);
+	vec4 color = vec4(textureColor, 1.0) + vec4(causticColor, 1.0) + specular;
 
 	// Fog effect
 	float fogFactor = pow(1.01, -distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));

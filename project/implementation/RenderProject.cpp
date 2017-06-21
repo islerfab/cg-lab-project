@@ -382,10 +382,6 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
             bRenderer().getModelRenderer()->queueModelInstance("lambis_truncata_shell", &"shell_instance_" [ count++], camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
         }
     }*/
-    
-    
-  
-    
 
 	// temple
 	modelMatrix = vmml::create_translation(vmml::Vector3f(-160.0f, -200.0f, 80.0f)) * vmml::create_scaling(vmml::Vector3f(1.0f));
