@@ -46,13 +46,12 @@ attribute vec3 Normal;
 attribute vec3 Tangent;
 attribute vec3 Bitangent;
 attribute vec4 TexCoord;
-
 varying vec4 texCoordVarying;
 
 void main() {
 	vec4 posViewSpace = ModelViewMatrix*Position;
 	surfaceToCamera = - posViewSpace.xyz;
-	causticTexCoord = vec2((Position.x + 500.0) / 500.0, Position.z / 500.0) * 2.0;
+	causticTexCoord = vec2((Position.x + 20.0) / 80.0, Position.z / 80.0) * 2.0;
 	float lightDistance = 0.0;
 	vec3 vertexNormal_ViewSpace = mat3(ModelViewMatrix) * Normal;
 	n = vertexNormal_ViewSpace;
@@ -72,7 +71,29 @@ void main() {
 		intensityBasedOnDist_0 = clamp(lightIntensity_0 / (lightAttenuation_0*lightDistance*lightDistance), 0.0, 1.0);
 	};
 
+	// Second Light
+	lightVectorTangentSpace_1 = TBN*(lightPositionViewSpace_1.xyz - posViewSpace.xyz);
+	lightDistance = distance(posViewSpace, lightPositionViewSpace_1);
+	intensityBasedOnDist_1 = 0.0;
+	if (lightDistance <= lightRadius_1) {
+		intensityBasedOnDist_1 = clamp(lightIntensity_1 / (lightAttenuation_1*lightDistance*lightDistance), 0.0, 1.0);
+	};
 
+	// Third Light
+	lightVectorTangentSpace_2 = TBN*(lightPositionViewSpace_2.xyz - posViewSpace.xyz);
+	lightDistance = distance(posViewSpace, lightPositionViewSpace_2);
+	intensityBasedOnDist_2 = 0.0;
+	if (lightDistance <= lightRadius_2) {
+		intensityBasedOnDist_2 = clamp(lightIntensity_2 / (lightAttenuation_2*lightDistance*lightDistance), 0.0, 1.0);
+	};
+
+	// Fourth Light
+	lightVectorTangentSpace_3 = TBN*(lightPositionViewSpace_3.xyz - posViewSpace.xyz);
+	lightDistance = distance(posViewSpace, lightPositionViewSpace_3);
+	intensityBasedOnDist_3 = 0.0;
+	if (lightDistance <= lightRadius_3) {
+		intensityBasedOnDist_3 = clamp(lightIntensity_3 / (lightAttenuation_3*lightDistance*lightDistance), 0.0, 1.0);
+	};
 	
 	texCoordVarying = TexCoord;
 

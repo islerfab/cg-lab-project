@@ -4,6 +4,7 @@ newmtl temple
 Kd 0.600000 0.600000 0.600000
 map_Kd temple.jpg
 
-Ks 0.1 0.1 0.1
-
 map_Custom1 caustic_map.jpg
+
+Ns 0.1
+Ks 0.20000 0.20000 0.20000

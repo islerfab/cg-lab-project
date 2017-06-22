@@ -2,7 +2,7 @@
 
 newmtl shark
 Kd 0.600000 0.600000 0.600000
-Ks 2.0 2.0 2.0
+Ns 0.1
+Ks 0.20000 0.20000 0.20000
 map_Kd shark.png
 map_Custom1 caustic_map.jpg
-Ns 100.0
