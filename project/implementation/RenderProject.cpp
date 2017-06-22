@@ -107,7 +107,7 @@ void RenderProject::initFunction()
 	bRenderer().getObjects()->loadObjModel_o("temple.obj", 4, SHADER_FROM_FILE, causticProperties);
 	bRenderer().getObjects()->loadObjModel_o("pillars.obj", 4, SHADER_FROM_FILE, causticProperties);
     bRenderer().getObjects()->loadObjModel_o("bottle.obj", 4, SHADER_FROM_FILE, causticProperties);
-	bRenderer().getObjects()->loadObjModel_o("ray.obj", 0, FLIP_Z | SHADER_FROM_FILE);
+	bRenderer().getObjects()->loadObjModel_o("ray.obj", 0, FLIP_Z | SHADER_FROM_FILE, causticProperties);
 
     //game state
     for(int i = 0; i <= 100; i += 5){
@@ -399,10 +399,25 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 
 	// God Rays
 	int count = 0;
-	for (int i = 0; i < 1; i++) {
-		for (int j = 0; j < 1; j++) {
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 2; j++) {
 			// translate and scale
-			modelMatrix = vmml::create_translation(vmml::Vector3f(i*50.0f, -0.0f, j*50.0f)) * vmml::create_rotation(float(M_PI / 4), vmml::Vector3f::UNIT_X) * vmml::create_scaling(vmml::Vector3f(1.0f));
+			modelMatrix = vmml::create_translation(vmml::Vector3f(i*150.0f, -180.0f, j*150.0f)) * vmml::create_rotation(float(M_PI / 4), vmml::Vector3f::UNIT_X) * vmml::create_scaling(vmml::Vector3f(1.0f, 1.0f, 15.0f));
+			// submit to render queue
+			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
+			bRenderer().getModelRenderer()->queueModelInstance("ray", &"ray_instance_"[count++], camera, modelMatrix, std::vector<std::string>());
+
+			modelMatrix = vmml::create_translation(vmml::Vector3f(-i*150.0f, -180.0f, j*150.0f)) * vmml::create_rotation(float(M_PI / 4), vmml::Vector3f::UNIT_X) * vmml::create_scaling(vmml::Vector3f(1.0f, 1.0f, 15.0f));
+			// submit to render queue
+			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
+			bRenderer().getModelRenderer()->queueModelInstance("ray", &"ray_instance_"[count++], camera, modelMatrix, std::vector<std::string>());
+
+			modelMatrix = vmml::create_translation(vmml::Vector3f(i*150.0f, -180.0f, -j*150.0f)) * vmml::create_rotation(float(M_PI / 4), vmml::Vector3f::UNIT_X) * vmml::create_scaling(vmml::Vector3f(1.0f, 1.0f, 15.0f));
+			// submit to render queue
+			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
+			bRenderer().getModelRenderer()->queueModelInstance("ray", &"ray_instance_"[count++], camera, modelMatrix, std::vector<std::string>());
+
+			modelMatrix = vmml::create_translation(vmml::Vector3f(-i*150.0f, -180.0f, -j*150.0f)) * vmml::create_rotation(float(M_PI / 4), vmml::Vector3f::UNIT_X) * vmml::create_scaling(vmml::Vector3f(1.0f, 1.0f, 15.0f));
 			// submit to render queue
 			// bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(0.2f, 0.2f, 1.0f));
 			bRenderer().getModelRenderer()->queueModelInstance("ray", &"ray_instance_"[count++], camera, modelMatrix, std::vector<std::string>());
