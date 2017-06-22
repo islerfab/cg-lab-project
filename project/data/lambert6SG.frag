@@ -98,7 +98,7 @@ void main() {
 	vec3 causticColor = texture2D(CustomMap_1, uv + dt).xyz / 2.0;	// Reduce intensity a bit by dividing it by 2
 	vec3 textureColor = texture2D(DiffuseMap, texCoordVarying.st).xyz;
 
-	vec4 color = diffuse * vec4(Kd, 1.0) + specular * vec4(Ks, 1.0) + vec4(textureColor, 1.0) + vec4(causticColor, 1.0);
+	vec4 color = diffuse * vec4(Kd, 1.0) * vec4(textureColor, 1.0) + specular * vec4(Ks, 1.0) + vec4(causticColor, 1.0);
 
 	// Fog effect
 	float fogFactor = pow(1.01, -distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));
