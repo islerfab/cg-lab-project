@@ -97,6 +97,7 @@ void RenderProject::initFunction()
     
     // load models
     bRenderer().getObjects()->loadObjModel_o("dune.obj", 4, FLIP_Z | SHADER_FROM_FILE, causticProperties);								// automatically generates a shader with a maximum of 4 lights (number of lights may vary between 0 and 4 during rendering without performance loss)
+	bRenderer().getObjects()->loadObjModel_o("cube.obj", 4, SHADER_FROM_FILE, causticProperties);
     bRenderer().getObjects()->loadObjModel_o("AG01_1.obj", customShader, FLIP_Z);
     bRenderer().getObjects()->loadObjModel_o("Chest.obj", 4, SHADER_FROM_FILE, causticProperties);									// the custom shader created above is used
     bRenderer().getObjects()->loadObjModel_o("plane.obj", 4, SHADER_FROM_FILE, causticProperties);
@@ -121,7 +122,7 @@ void RenderProject::initFunction()
     
     // create lights
     // bRenderer().getObjects()->createLight("dayLight", vmml::Vector3f(0.0f, 0.0f, 0.0f), vmml::Vector3f(1.0f, 0.85f, 0.7f), 10.0f, 0.01f, 300.0);
-    bRenderer().getObjects()->createLight("headLamp", -bRenderer().getObjects()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 1.0f, 1.0f), 1000.0f, 0.5f, 300.0f);
+    bRenderer().getObjects()->createLight("headLamp", -bRenderer().getObjects()->getCamera("camera")->getPosition(), vmml::Vector3f(1.0f, 1.0f, 1.0f), 1000.0f, 0.2f, 1000.0f);
     
     // postprocessing
     bRenderer().getObjects()->createFramebuffer("fbo");					// create framebuffer object
@@ -308,10 +309,15 @@ void RenderProject::updateRenderQueue(const std::string &camera, const double &d
 {
     // Set offset
     bRenderer().getObjects()->getProperties("causticProperties")->setScalar("offset", _offset);		// pass offset for wave effect
-    bRenderer().getObjects()->getProperties("causticProperties")->setVector("waterAmbient", vmml::Vector3f(0.1, 0.1f, 0.15f));		// pass ambient color (could be changing dynamically)
+    bRenderer().getObjects()->getProperties("causticProperties")->setVector("waterAmbient", vmml::Vector3f(0.1f, 0.18f, 0.23f));		// pass ambient color (could be changing dynamically)
+
+	// Cube
+	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, 0.0f)) * vmml::create_scaling(vmml::Vector3f(20.0f));
+	// submit to render queue
+	bRenderer().getModelRenderer()->queueModelInstance("cube", "cube_instance", camera, modelMatrix, std::vector<std::string>({ "headLamp" }));
 
     // Floor
-    vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(50.0f, -199.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(2.20f)) * vmml::create_translation(vmml::Vector3f(-500.0f, 0.0f, 0.0f));
+    modelMatrix = vmml::create_translation(vmml::Vector3f(50.0f, -199.0f, 50.0f)) * vmml::create_scaling(vmml::Vector3f(2.20f)) * vmml::create_translation(vmml::Vector3f(-500.0f, 0.0f, 0.0f));
     // First quarter
     bRenderer().getModelRenderer()->queueModelInstance("dune", "dune_instance1", camera, modelMatrix, std::vector<std::string>({ "headLamp" }), false);
     // Second quarter
