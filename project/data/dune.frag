@@ -36,7 +36,6 @@ uniform vec3 lightSpecularColor_3;
 varying vec3 lightVectorTangentSpace_3;
 varying float intensityBasedOnDist_3;
 uniform sampler2D CustomMap_1;
-uniform sampler2D DiffuseMap;
 varying vec3 surfaceToCameraTangentSpace;
 varying vec3 n;
 varying vec3 surfaceToCamera;

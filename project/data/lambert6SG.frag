@@ -42,61 +42,67 @@ varying vec3 n;
 varying vec3 surfaceToCamera;
 varying vec2 causticTexCoord;
 uniform vec3 Kd;
+uniform vec3 Ks;
 uniform float offset;
 uniform vec3 waterAmbient;
-
 varying vec4 texCoordVarying;
+uniform float Ns;
 
 void main() {
-    vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
-    vec3 surfaceNormal = normalize(n);
-    
-    // The camera in view space goes towards the z-axis
-    vec3 cameraDirection = normalize(vec3(0.0, 0.0, 1.0));
-    
-    float intensity = 0.0;
-    
-    // HEAD LAMP
-    // IF it's in distance (as defined in the light source)
-    if (intensityBasedOnDist_0 > 0.0
-        // AND the surface points towards us
-        && (intensity = max(dot(surfaceNormal, normalize(surfaceToCamera)), 0.0)) > 0.0
-        // AND the point is in the cone of the headlamp
-        && dot(normalize(surfaceToCamera), -cameraDirection) > 0.95) {
-        intensity = clamp(intensity, 0.0, 1.0);
-        diffuse += vec4(lightDiffuseColor_0 * (intensity * intensityBasedOnDist_0), 0.0);
-    }
-    // Caustic effect
-    vec2 uv = causticTexCoord;
-    vec2 dt;
-    dt.x = sin(uv.y * 50.0 + offset / 2.0) / 250.0;
-    dt.y = sin(uv.x * 10.0 + offset / 2.0) / 100.0;
-    
-    vec3 causticColor = texture2D(CustomMap_1, uv + dt).xyz / 2.0;	// Reduce intensity a bit by dividing it by 2
-    vec3 textureColor = texture2D(DiffuseMap, texCoordVarying.st).xyz;
-    
-    // TODO: Add specular component as well (it was not necessary for sandy dune, but a plane has to have it)
-    // OLD CODE FOR THIS:
-    //	if (intensityBasedOnDist_1 > 0.0 && (intensity = max(dot(surfaceNormal, normalize(lightVectorTangentSpace_1)), 0.0)) > 0.0){
-    //		intensity = clamp(intensity, 0.0, 1.0);
-    //		diffuse += vec4(lightDiffuseColor_1 * (intensity * intensityBasedOnDist_1), 0.0);
-    //		specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-normalize(lightVectorTangentSpace_1), surfaceNormal))), Ns);
-    //		specular += vec4(lightSpecularColor_1 * (specularCoefficient * intensity * intensityBasedOnDist_1), 0.0);
-    //	}
-    //
-    //	diffuse = diffuse * vec4(Kd,1.0);
-    //	specular = specular  * vec4(Ks, 0.0);
-    //	gl_FragColor = clamp(diffuse+specular, 0.0, 1.0);
-    
-    // TODO: Make "diffuse" variable that's dependent on the headlight have an influence as well
-    vec4 color = vec4(textureColor, 1.0) + vec4(causticColor, 1.0);
-    
-    // Fog effect
-    float fogFactor = pow(1.01, -distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));
-    color.rgb = color.rgb * fogFactor + (1.0 - fogFactor) * waterAmbient;
-    
-    //color = texture2DProj(DiffuseMap, texCoordVarying);
-    
-    gl_FragColor = clamp(color, 0.0, 1.0);
-    // gl_FragColor = vec4(waterAmbient, 1.0);
+	vec4 diffuse = vec4(0.0, 0.0, 0.0, 1.0);
+	vec4 specular = vec4(0.0, 0.0, 0.0, 1.0);
+	vec3 surfaceNormal = normalize(n);
+
+	// The camera in view space goes towards the z-axis
+	vec3 cameraDirection = normalize(vec3(0.0, 0.0, 1.0));
+
+	float intensity = 0.0;
+
+	// HEAD LAMP
+	// IF it's in distance (as defined in the light source)
+	if (intensityBasedOnDist_0 > 0.0
+			// AND the surface points towards us
+			&& (intensity = max(dot(surfaceNormal, normalize(surfaceToCamera)), 0.0)) > 0.0
+			// AND the point is in the cone of the headlamp
+			&& dot(normalize(surfaceToCamera), -cameraDirection) > 0.95) {
+		intensity = clamp(intensity, 0.0, 1.0);
+		diffuse += vec4(lightDiffuseColor_0 * (intensity * intensityBasedOnDist_0), 0.0);
+		float specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-normalize(lightVectorTangentSpace_1), surfaceNormal))), Ns);
+		specular += vec4(lightSpecularColor_0 * (specularCoefficient * intensity * intensityBasedOnDist_0), 0.0);
+	}
+	
+	// Second Light
+	if (intensityBasedOnDist_1 > 0.0 && (intensity = max(dot(surfaceNormal, normalize(lightVectorTangentSpace_1)), 0.0)) > 0.0){
+		intensity = clamp(intensity, 0.0, 1.0);
+		diffuse += vec4(lightDiffuseColor_1 * (intensity * intensityBasedOnDist_1), 0.0);
+	}
+
+	// Third Light
+	if (intensityBasedOnDist_2 > 0.0 && (intensity = max(dot(surfaceNormal, normalize(lightVectorTangentSpace_2)), 0.0)) > 0.0){
+		intensity = clamp(intensity, 0.0, 1.0);
+		diffuse += vec4(lightDiffuseColor_2 * (intensity * intensityBasedOnDist_2), 0.0);
+	}
+
+	// Fourth Light
+	if (intensityBasedOnDist_3 > 0.0 && (intensity = max(dot(surfaceNormal, normalize(lightVectorTangentSpace_3)), 0.0)) > 0.0){
+		intensity = clamp(intensity, 0.0, 1.0);
+		diffuse += vec4(lightDiffuseColor_3 * (intensity * intensityBasedOnDist_3), 0.0);
+	}
+
+	// Caustic effect
+	vec2 uv = causticTexCoord;
+	vec2 dt;
+	dt.x = sin(uv.y * 50.0 + offset / 2.0) / 250.0;
+	dt.y = sin(uv.x * 10.0 + offset / 2.0) / 100.0;
+	
+	vec3 causticColor = texture2D(CustomMap_1, uv + dt).xyz / 2.0;	// Reduce intensity a bit by dividing it by 2
+	vec3 textureColor = texture2D(DiffuseMap, texCoordVarying.st).xyz;
+
+	vec4 color = diffuse * vec4(Kd, 1.0) + specular * vec4(Ks, 1.0) + vec4(textureColor, 1.0) + vec4(causticColor, 1.0);
+
+	// Fog effect
+	float fogFactor = pow(1.01, -distance(vec3(0.0, 0.0, 0.0), surfaceToCamera));
+	color.rgb = color.rgb * fogFactor + (1.0 - fogFactor) * waterAmbient;
+	
+	gl_FragColor = clamp(color, 0.0, 1.0);
 }
