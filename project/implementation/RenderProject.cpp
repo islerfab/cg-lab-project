@@ -39,7 +39,7 @@ void RenderProject::initFunction()
 
 	// set shader versions (optional)
 	bRenderer().getObjects()->setShaderVersionDesktop("#version 120");
-	bRenderer().getObjects()->setShaderVersionES("#version 100");
+	bRenderer().getObjects()->setShaderVersionES("#version 120");
 
 	// load materials and shaders before loading the model
 	ShaderPtr customShader = bRenderer().getObjects()->generateShader("customShader", { 2, true, true, true, true, true, true, true, true, true, false, false, false });
@@ -71,7 +71,7 @@ void RenderProject::initFunction()
     
     // fill arrays for bottles
     for (int i = 0; i < NO_BOTTLES; i++) {
-        bottleSize[i] = 0.7f;
+        bottleSize[i] = 1.0f;
         bottleDraw[i] = true;
         bottlePos[i] = vmml::Vector3f(float(rand() % 800 - 400), -198.0f, float(rand() % 800 - 400));
     }
@@ -253,9 +253,7 @@ void RenderProject::loopFunction(const double &deltaTime, const double &elapsedT
         
         modelMatrix = vmml::create_translation(vmml::Vector3f(-0.9f / bRenderer().getView()->getAspectRatio(), 0.7f, -0.65f)) * scaling;
         bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getTextSprite("gameState "+std::to_string(_airCounter)), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
-        
-        //game state
-        float start_time = clock();
+    
 	
         //the higher the more time you have to find the treasure
         if((int)_offset % 20 < 10 && !_lostAir)
