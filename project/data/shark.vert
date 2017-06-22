@@ -46,13 +46,12 @@ attribute vec3 Normal;
 attribute vec3 Tangent;
 attribute vec3 Bitangent;
 attribute vec4 TexCoord;
-
 varying vec4 texCoordVarying;
 
 void main() {
 	vec4 posViewSpace = ModelViewMatrix*Position;
 	surfaceToCamera = - posViewSpace.xyz;
-	causticTexCoord = vec2((Position.x + 500.0) / 100.0, Position.z / 100.0) * 2.0;
+	causticTexCoord = vec2((Position.x + 25.0) / 75.0, Position.z / 75.0) * 2.0;
 	float lightDistance = 0.0;
 	vec3 vertexNormal_ViewSpace = mat3(ModelViewMatrix) * Normal;
 	n = vertexNormal_ViewSpace;
