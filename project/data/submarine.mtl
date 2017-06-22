@@ -2,7 +2,7 @@
 
 newmtl submarine
 Kd 0.800000 0.800000 0.800000
-Ns 0.1
+Ns 50.0
 Ks 0.20000 0.20000 0.20000
 
 map_Kd submarine.jpg
