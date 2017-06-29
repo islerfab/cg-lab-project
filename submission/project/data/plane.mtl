@@ -1,0 +1,10 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl plane
+Kd 0.800000 0.800000 0.800000
+Ns 0.1
+Ks 0.20000 0.20000 0.20000
+d 1.000000
+map_Kd monster.jpg
+map_Custom1 caustic_map.png
