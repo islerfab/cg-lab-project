@@ -1,9 +1,0 @@
-# Exported from 3D Builder
-
-newmtl submarine
-Kd 0.800000 0.800000 0.800000
-Ns 50.0
-Ks 0.20000 0.20000 0.20000
-
-map_Kd submarine.jpg
-map_Custom1 caustic_map.jpg
